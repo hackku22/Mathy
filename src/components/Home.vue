@@ -20,7 +20,7 @@ const login = () => {
 
 <style scoped>
 button {
-  background-color: #215b8a; /* Green */
+  background-color: #4484c4;
   border: none;
   color: white;
   padding: 15px 32px;
