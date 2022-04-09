@@ -9,8 +9,10 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint --fix . --ext .ts",
     "preview": "vite preview",
-    "docker:build": "pnpm run build && docker image build . -t glmdev/mathy",
-    "docker:push": "docker push glmdev/mathy"
+    "cd:build": "pnpm run build && docker image build . -t glmdev/mathy",
+    "cd:push": "docker push glmdev/mathy",
+    "cd:deploy": "kubectl apply -f deploy.yaml",
+    "cd:rollout": "kubectl rollout restart deployment/mathy"
   },
   "dependencies": {
     "@vuetify/vite-plugin": "1.0.0-alpha.10",
