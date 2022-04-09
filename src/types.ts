@@ -98,5 +98,7 @@ export class RichTextBox {
         public text: string = '',
         public x: Number = 0,
         public y: Number = 0,
-        ) {}
+        ) {
+   
+    }
 }

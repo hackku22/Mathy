@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RichTextBox } from "../types.ts";
-
+import { stepX, stepY } from "../support/const.ts";
 const props = defineProps({
   value: {
     type: RichTextBox,
   },
-  // statement: { type: String, required: true },
-  // startingX:  { type: Number, default: 0 },
-  // startingY:  { type: Number, default: 0 },
 });
 </script>
 
 <template>
   <Draggable
-    :grid="[5, 5]"
+    :grid="[stepX, stepY]"
     :default-position="{ x: props.value.x, y: props.value.y }"
   >
     <div style="display: flex; bottom: 10px; right: 0">

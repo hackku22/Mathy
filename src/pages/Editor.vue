@@ -11,6 +11,7 @@ import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
 import {RichTextBox} from "../types.ts";
+import { stepX, stepY } from "../support/const.ts";
 
 const math = new MathPage(uuidv4())
 const statements = ref<MathStatement[]>([])
@@ -114,15 +115,18 @@ function richUpdateValue() {
     <q-page-container id="editor" >
 <!--      <WrapperBox />-->
 
-      <span v-for="statement in statements">
+      <span v-for="statement in statements" style="display: flex">
         <Draggable
-            :grid="[25, 25]"
+            :grid="[stepX, stepY]"
         >
+        <div>
           <Statement
             :key="statementsKey"
             :statement="statement"
             :evaluation="evaluation"
           />
+        </div>
+
         </Draggable>
       </span>
 
