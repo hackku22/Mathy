@@ -12,7 +12,7 @@ import { ref } from "vue";
 </script>
 
 <template>
-  <q-layout view="hHh Lpr fff">
+  <q-layout view="hHr LpR fFf">
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
@@ -26,6 +26,7 @@ import { ref } from "vue";
       <q-tabs align="left">
         <q-route-tab to="/Scratch" label="Scratch" />
         <q-route-tab to="/Editor" label="Editor" />
+
       </q-tabs>
     </q-header>
 

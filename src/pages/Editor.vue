@@ -21,11 +21,17 @@ const richTextStatments = ref([
 
 const richEditModal = ref(false);
 const richEditExpression = ref("");
-const richEditStatement = (stmt: String) => {
-  console.log('editing statement', stmt, editModal)
-  activeStatement = stmt
-  richEditModal.value = true
-  richEditExpression.value = stmt.raw
+const richEditID = ref(0);
+
+const richEditStatement = (id: int) => {
+  console.log("editing statement", id, richEditModal);
+  richEditModal.value = true;
+  richEditID.value = id;
+  richEditExpression.value = richTextStatments.value[richEditID.value].text;
+};
+
+function richUpdateValue() {
+  richTextStatments.value[richEditID.value].text = richEditExpression.value;
 }
 </script>
 
@@ -61,19 +67,19 @@ const richEditStatement = (stmt: String) => {
     </q-drawer>
 
     <q-page-container id="editor" style="display: flex">
-      <q-dialog ref="edit-modal" v-model="richEditModal">
+      <q-dialog v-model="richEditModal">
         <q-card>
+          <q-editor v-model="richEditExpression" min-height="5rem" />
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancel" v-close-popup></q-btn>
-            <q-btn flat label="Save" v-close-popup></q-btn>
+            <q-btn flat label="Save" @click="richUpdateValue" v-close-popup></q-btn>
           </q-card-actions>
         </q-card>
       </q-dialog>
-
       <span v-for="(item, index) in richTextStatments">
         <TextBox
           :statement="item.text"
-          v-on:edit="() => (stmt ? richEditStatement(stmt) : {})"
+          v-on:edit="() => (item.text ? richEditStatement(index) : {})"
         ></TextBox>
       </span>
     </q-page-container>
