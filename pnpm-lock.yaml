@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@typescript-eslint/eslint-plugin': ^5.18.0
   '@typescript-eslint/parser': ^5.18.0
+  '@vitejs/plugin-vue': ^2.3.1
   '@volar/vue-language-service': ^0.33.9
   eslint: ^8.13.0
   mathjs: ^10.4.3
@@ -18,6 +19,7 @@ dependencies:
 devDependencies:
   '@typescript-eslint/eslint-plugin': 5.18.0_0dd9be2ba5ed9805045f3fec8be848f5
   '@typescript-eslint/parser': 5.18.0_eslint@8.13.0+typescript@4.6.3
+  '@vitejs/plugin-vue': 2.3.1_vite@2.9.1+vue@3.2.31
   '@volar/vue-language-service': 0.33.9
   eslint: 8.13.0
   typescript: 4.6.3
@@ -432,6 +434,17 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.18.0
       eslint-visitor-keys: 3.3.0
+    dev: true
+
+  /@vitejs/plugin-vue/2.3.1_vite@2.9.1+vue@3.2.31:
+    resolution: {integrity: sha512-YNzBt8+jt6bSwpt7LP890U1UcTOIZZxfpE5WOJ638PNxSEKOqAi0+FSKS0nVeukfdZ0Ai/H7AFd6k3hayfGZqQ==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      vite: ^2.5.10
+      vue: ^3.2.25
+    dependencies:
+      vite: 2.9.1
+      vue: 3.2.31
     dev: true
 
   /@volar/code-gen/0.33.9:
