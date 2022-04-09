@@ -4,6 +4,9 @@ import { DraggablePlugin } from '@braks/revue-draggable'
 import { createAuth0 } from '@auth0/auth0-vue'
 import router from './router'
 
+import 'katex/dist/katex.min.css'
+import 'katex/dist/contrib/auto-render.min'
+
 
 
 const app = createApp(App)
