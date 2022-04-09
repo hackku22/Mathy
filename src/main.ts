@@ -54,7 +54,7 @@ app.use(
     createAuth0({
         domain: 'dev-ge84r-eu.us.auth0.com',
         client_id: 'zHjZGg1uPws0DkQg5bRdKcDX8m6AuTZl', // eslint-disable-line camelcase
-        redirect_uri: window.location.origin, // eslint-disable-line camelcase
+        redirect_uri: window.location.origin + '/auth', // eslint-disable-line camelcase
     }),
 )
 

@@ -17,6 +17,11 @@ const routes = [
         name: 'Editor',
         component: () => import('./pages/Editor.vue'),
     },
+    {
+        path:'/auth',
+        name: 'Auth',
+        component: () => import('./pages/Auth.vue'),
+    },
 ]
 
 const router = createRouter({
