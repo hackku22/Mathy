@@ -6,12 +6,11 @@ import Katex from './Katex.vue'
 
 const props = defineProps<{
   statement: MathStatement,
-  evaluation: EvaluationResult,
-  renderVersion: number,
+  evaluation?: EvaluationResult,
 }>()
 
 const getValueStatement = (): Maybe<MathStatement> => {
-  const value = props.evaluation.statements[props.statement.id]
+  const value = props.evaluation?.statements?.[props.statement.id]
   if ( value ) {
     return MathStatement.temp(String(value))
   }
@@ -48,7 +47,7 @@ computed(() => value = getValueStatement())
 </style>
 
 <template>
-  <div class="math-statement">
+  <div class="math-statement" style="background: white">
     <div class="content">
       <Katex :statement="statement" size="big"/>
       <div class="result" v-if="value">

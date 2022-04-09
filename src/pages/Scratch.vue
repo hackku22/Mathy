@@ -10,7 +10,6 @@
   const stmt1Id = page.addRaw('x = y+3/4')
   const stmt2Id = page.addRaw('y = 9')
   const evaluation = page.evaluate()
-  let renderVersion = 0
 
   const stmt = page.getStatement(stmt1Id)
   console.log({page, stmt1Id})
@@ -69,6 +68,5 @@
     v-on:edit="() => stmt ? editStatement(stmt) : {}"
     :statement="stmt"
     :evaluation="evaluation"
-    :render-version="renderVersion"
   />
 </template>
