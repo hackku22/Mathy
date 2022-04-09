@@ -8,6 +8,10 @@ import 'vuetify/styles' // Global CSS has to be imported
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import 'katex/dist/katex.min.css'
+import 'katex/dist/contrib/auto-render.min'
+
+
 
 const app = createApp(App)
 const vuetify = createVuetify({

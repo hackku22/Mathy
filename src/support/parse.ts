@@ -284,15 +284,18 @@ export class MathStatement {
     /** Render the statement as HTML string. */
     toHTMLString(): HTMLString {
         return katex.renderToString(this.toLaTeX(), {
-            output: 'mathml',
+            output: 'html',
         }) as HTMLString
     }
 
     /** Render the statement to a DOM element. */
-    toDOM(): HTMLSpanElement {
-        const node = document.createElement('span')
+    toDOM(node?: HTMLElement): HTMLSpanElement {
+        if ( !node ) {
+            node = document.createElement('span')
+        }
+
         katex.render(this.toLaTeX(), node, {
-            output: 'mathml',
+            output: 'html',
         })
         return node
     }

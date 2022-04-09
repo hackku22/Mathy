@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {HTMLString} from '../types'
 import {computed} from 'vue'
 import {MathStatement} from '../support/parse'
 
@@ -8,8 +7,10 @@ const props = defineProps<{
   size?: 'big' | 'small',
 }>()
 
-let displayHtml: HTMLString = props.statement.toHTMLString()
-computed(() => displayHtml = props.statement.toHTMLString())
+const getRenderedHTML = () => props.statement.toHTMLString()
+
+const renderedHtml = getRenderedHTML()
+computed(getRenderedHTML)
 </script>
 
 <style>
@@ -23,7 +24,7 @@ computed(() => displayHtml = props.statement.toHTMLString())
 </style>
 
 <template>
-  <div class="big" v-if="props?.size === 'big'" v-html="displayHtml"></div>
-  <div class="small" v-else-if="props?.size === 'small'" v-html="displayHtml"></div>
-  <div v-else v-html="displayHtml"></div>
+  <div ref="container" class="big" v-if="props?.size === 'big'" v-html="renderedHtml"></div>
+  <div ref="container" class="small" v-else-if="props?.size === 'small'" v-html="renderedHtml"></div>
+  <div ref="container" v-else v-html="renderedHtml"></div>
 </template>
