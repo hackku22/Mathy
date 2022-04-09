@@ -7,19 +7,26 @@ const props = defineProps<{
   size?: 'big' | 'small',
 }>()
 
-const getRenderedHTML = () => props.statement.toHTMLString()
+const getRenderedHTML = () => {
+  console.log('getRenderedHTML', props.statement)
+  try {
+    return props.statement.toHTMLString()
+  } catch (_) {
+    return ''
+  }
+}
 
-const renderedHtml = getRenderedHTML()
-computed(getRenderedHTML)
+let renderedHtml = getRenderedHTML()
+computed(() => renderedHtml = getRenderedHTML())
 </script>
 
 <style>
   .big {
-    transform: scale(1.3);
+    font-size: 1.3em;
   }
 
   .small {
-    transform: scale(0.9);
+    font-size: 0.9em;
   }
 </style>
 
