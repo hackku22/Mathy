@@ -1,0 +1,82 @@
+/** Type alias for something that may or may not be wrapped in a promise. */
+export type Awaitable<T> = T | Promise<T>
+
+/** Type alias for something that may be undefined. */
+export type Maybe<T> = T | undefined
+
+export type MaybeArr<T extends [...any[]]> = {
+    [Index in keyof T]: Maybe<T[Index]>
+} & {length: T['length']}
+
+export type Either<T1, T2> = Left<T1> | Right<T2>
+
+export type Left<T> = [T, undefined]
+
+export type Right<T> = [undefined, T]
+
+export function isLeft<T1, T2>(what: Either<T1, T2>): what is Left<T1> {
+    return typeof what[1] === 'undefined'
+}
+
+export function isRight<T1, T2>(what: Either<T1, T2>): what is Right<T2> {
+    return typeof what[0] === 'undefined'
+}
+
+export function left<T>(what: T): Left<T> {
+    return [what, undefined]
+}
+
+export function right<T>(what: T): Right<T> {
+    return [undefined, what]
+}
+
+export function unleft<T>(what: Left<T>): T {
+    return what[0]
+}
+
+export function unright<T>(what: Right<T>): T {
+    return what[1]
+}
+
+/** Type alias for a callback that accepts a typed argument. */
+export type ParameterizedCallback<T> = ((arg: T) => any)
+
+/** A key-value form of a given type. */
+export type KeyValue<T> = {key: string, value: T}
+
+/** Simple helper method to verify that a key is a keyof some object. */
+export function isKeyof<T>(key: unknown, obj: T): key is keyof T {
+    if ( typeof key !== 'string' && typeof key !== 'symbol' ) {
+        return false
+    }
+
+    return key in obj
+}
+
+/** A typescript-compatible version of Object.hasOwnProperty. */
+export function hasOwnProperty<X extends {}, Y extends PropertyKey>(obj: X, prop: Y): obj is X & Record<Y, unknown> {  // eslint-disable-line @typescript-eslint/ban-types
+    return Object.hasOwnProperty.call(obj, prop)
+}
+
+/**
+ * TypeScript helper for creating tagged-types.
+ */
+export interface TypeTag<S extends string> {
+    readonly __typeTag: S
+}
+
+export type PrefixTypeArray<T, TArr extends unknown[]> = [T, ...TArr]
+export type SuffixTypeArray<TArr extends unknown[], T> = [...TArr, T]
+export type TypeArraySignature<TArr extends unknown[], TReturn> = (...params: TArr) => TReturn
+
+export type MethodsOf<T, TMethod = (...args: any[]) => any> = {
+    [K in keyof T]: T[K] extends TMethod ? K : never
+}[keyof T]
+
+export type Awaited<T> = T extends PromiseLike<infer U> ? U : T
+
+export type Integer = TypeTag<'@app.Integer'> & number
+
+export function isInteger(num: number): num is Integer {
+    return !isNaN(num) && parseInt(String(num), 10) === num
+}
