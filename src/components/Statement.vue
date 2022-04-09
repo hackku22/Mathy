@@ -30,6 +30,7 @@ computed(() => value = getValueStatement())
 
 <template>
   <div class="math-statement">
+
     <Katex :statement="statement" size="big"/>
     <div class="result" v-if="value">
       <hr v-if="value" style="border: 1px solid #ccc; border-bottom: 0">
