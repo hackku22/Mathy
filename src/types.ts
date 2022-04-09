@@ -85,6 +85,7 @@ export type LaTeXString = TypeTag<'@app.LaTeXString'> & string
 export type HTMLString = TypeTag<'@app.HTMLString'> & string
 export type StatementID = TypeTag<'@app.StatementID'> & string
 export type VariableName = TypeTag<'@app.VariableName'> & string
+export type RoutePath = TypeTag<'@app.RoutePath'> & string
 
 export interface EvaluationResult {
     variables: Record<VariableName, any>

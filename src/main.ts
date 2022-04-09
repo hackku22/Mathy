@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { DraggablePlugin } from '@braks/revue-draggable'
 import { createAuth0 } from '@auth0/auth0-vue'
+import router from './router'
+
 
 
 const app = createApp(App)
@@ -13,6 +15,8 @@ app.use(
         redirect_uri: window.location.origin, // eslint-disable-line camelcase
     }),
 )
+
+app.use(router)
 
 app.use(DraggablePlugin)
 app.mount('#app')

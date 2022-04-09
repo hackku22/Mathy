@@ -10,8 +10,10 @@ import { MathPage } from './support/page'
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <Home msg="CrystalMathy" />
+  <div id="nav">
+    <router-link to="/">Home</router-link>
+  </div>
+  <router-view/>
 </template>
 
 <style>
