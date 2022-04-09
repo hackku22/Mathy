@@ -12,7 +12,7 @@ import { ref } from "vue";
 </script>
 
 <template>
-  <q-layout view="hHr LpR fFf">
+  <q-layout view="hHh Lpr fff">
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>

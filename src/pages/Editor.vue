@@ -18,15 +18,21 @@
     </q-header>
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-    variables
-    <q-separator />
-    function
- <!-- drawer content -->
+      <div class="column" style="height: 100%">
+        <div class="col">
+          variables
+        </div>
+        <div class="col">
+          <q-separator />
+          function
+        </div>
+      </div>
+
+      <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container> 
-    <WrapperBox/>
-
+    <q-page-container>
+      <WrapperBox />
     </q-page-container>
 
     <q-footer reveal elevated class="bg-grey-8 text-white">
