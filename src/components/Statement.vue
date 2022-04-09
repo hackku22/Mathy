@@ -7,6 +7,7 @@ import Katex from './Katex.vue'
 const props = defineProps<{
   statement: MathStatement,
   evaluation: EvaluationResult,
+  renderVersion: number,
 }>()
 
 const getValueStatement = (): Maybe<MathStatement> => {
@@ -36,6 +37,14 @@ computed(() => value = getValueStatement())
   .sidebar {
     padding-left: 10px;
   }
+
+  .edit-button {
+    border: none;
+  }
+
+  .edit-button:hover {
+    cursor: pointer;
+  }
 </style>
 
 <template>
@@ -48,7 +57,7 @@ computed(() => value = getValueStatement())
       </div>
     </div>
     <div class="sidebar">
-      <button>
+      <button class="edit-button" @click="() => $emit('edit')" title="Edit this expression">
         <img src="../assets/edit.svg" alt="Edit" height="16">
       </button>
     </div>
