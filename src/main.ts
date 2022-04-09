@@ -1,15 +1,54 @@
+/*
+--------------------------------------------------
+                    Vue Helpers
+--------------------------------------------------
+*/
 import { createApp } from 'vue'
-import App from './App.vue'
+
+import router from './router'
+
+/*
+--------------------------------------------------
+                    App UI
+--------------------------------------------------
+*/
+import { Quasar } from 'quasar'
+
+// Import icon libraries
+import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css'
+import '@quasar/extras/material-icons/material-icons.css'
+import '@quasar/extras/fontawesome-v6/fontawesome-v6.css'
+
+// A few examples for animations from Animate.css:
+// import @quasar/extras/animate/fadeIn.css
+// import @quasar/extras/animate/fadeOut.css
+
+// Import Quasar css
+import 'quasar/src/css/index.sass'
+
+/*
+--------------------------------------------------
+                    Plugins
+--------------------------------------------------
+*/
 import { DraggablePlugin } from '@braks/revue-draggable'
 import { createAuth0 } from '@auth0/auth0-vue'
-import router from './router'
 
 import 'katex/dist/katex.min.css'
 import 'katex/dist/contrib/auto-render.min'
 
-
+/*
+--------------------------------------------------
+                    Components
+--------------------------------------------------
+*/
+import App from './App.vue'
 
 const app = createApp(App)
+
+app.use(Quasar, {
+    plugins: {}, // import Quasar plugins and add here
+})
 
 app.use(
     createAuth0({

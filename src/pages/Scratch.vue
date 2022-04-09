@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import {MathPage} from '../support/page'
   import {v4 as uuidv4} from 'uuid'
-  import Statement from './Statement.vue'
+  import Statement from '../components/Statement.vue'
   import {MathStatement} from '../support/parse'
 
   const page = new MathPage(uuidv4())

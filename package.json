@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@auth0/auth0-vue": "^1.0.0",
+    "@quasar/extras": "^1.13.5",
     "@types/katex": "^0.14.0",
     "@types/uuid": "^8.3.4",
     "@vuetify/vite-plugin": "1.0.0-alpha.10",
@@ -24,6 +25,7 @@
     "install": "^0.13.0",
     "katex": "^0.15.3",
     "mathjs": "^10.4.3",
+    "quasar": "^2.6.6",
     "uuid": "^8.3.2",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14",
@@ -31,11 +33,13 @@
   },
   "devDependencies": {
     "@braks/revue-draggable": "^0.4.2",
+    "@quasar/vite-plugin": "^1.0.9",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
     "@vitejs/plugin-vue": "^2.3.1",
     "@volar/vue-language-service": "^0.33.9",
     "eslint": "^8.13.0",
+    "sass": "1.32.0",
     "typescript": "^4.5.4",
     "vite": "^2.9.0",
     "vue-tsc": "^0.33.9"
