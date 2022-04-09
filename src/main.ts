@@ -29,5 +29,5 @@ app.use(
 
 app.use(router)
 
-app.use(DraggablePlugin)
+app.use(DraggablePlugin);
 app.mount('#app')

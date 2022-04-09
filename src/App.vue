@@ -4,9 +4,6 @@ import { MathPage } from "./support/page";
 (window as any).Stmt = MathStatement;
 (window as any).Pg = MathPage;
 
-  theme: {
-    defaultTheme: 'dark'
-  }
 </script>
 
 <template>
@@ -22,7 +19,7 @@ import { MathPage } from "./support/page";
     <v-main>
       
       <v-card elevation="0" height="h-100">
-          <router-view />
+            <router-view />
 
       </v-card>
     </v-main>
