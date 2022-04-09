@@ -1,5 +1,6 @@
 import * as math from 'mathjs'
-import {hasOwnProperty} from '../types'
+import katex from 'katex'
+import {HTMLString, LaTeXString} from '../types'
 
 /** Base class for walks over MathNode trees. */
 export abstract class MathNodeWalk<TReturn> {
@@ -259,6 +260,24 @@ export class MathStatement {
 
     parse(): math.MathNode {
         return math.parse(this.raw)
+    }
+
+    toLaTeX(): LaTeXString {
+        return this.parse().toTex() as LaTeXString
+    }
+
+    toHTMLString(): HTMLString {
+        return katex.renderToString(this.toLaTeX(), {
+            output: 'mathml',
+        }) as HTMLString
+    }
+
+    toDOM(): HTMLSpanElement {
+        const node = document.createElement('span')
+        katex.render(this.toLaTeX(), node, {
+            output: 'mathml',
+        })
+        return node
     }
 
     symbols(): math.SymbolNode[] {

@@ -3,7 +3,9 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import HelloWorld from './components/HelloWorld.vue'
 import { MathStatement } from './support/parse'
-console.log('math statement', MathStatement)
+import { MathPage } from './support/page'
+(window as any).Stmt = MathStatement
+;(window as any).Pg = MathPage
 </script>
 
 <template>
