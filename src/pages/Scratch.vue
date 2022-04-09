@@ -66,7 +66,7 @@
   </q-dialog>
   <Statement
     v-if="stmt"
-    v-on:edit="() => editStatement(stmt)"
+    v-on:edit="() => stmt ? editStatement(stmt) : {}"
     :statement="stmt"
     :evaluation="evaluation"
     :render-version="renderVersion"
