@@ -31,8 +31,10 @@
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container>
-      <WrapperBox />
+    <q-page-container style="display: flex">
+
+      <TextBox/>
+
     </q-page-container>
 
     <q-footer reveal elevated class="bg-grey-8 text-white">
@@ -48,6 +50,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import WrapperBox from "../components/WrapperBox.vue";
+import TextBox from "../components/TextBox.vue";
 
 const leftDrawerOpen = ref(false);
 
