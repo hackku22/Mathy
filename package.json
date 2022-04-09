@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "mathjs": "^10.4.3",
     "vue": "^3.2.25"
   },
   "devDependencies": {
