@@ -16,6 +16,11 @@ export class MathPage {
         public readonly id: string,
     ) {}
 
+    /** Get all defined statements. */
+    getStatements(): MathStatement[] {
+        return Object.values(this.statements)
+    }
+
     /** Get a statement by ID if it exists. */
     getStatement(id: StatementID): Maybe<MathStatement> {
         return this.statements[id]

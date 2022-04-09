@@ -324,4 +324,18 @@ export class MathStatement {
     uses(): math.SymbolNode[] {
         return (new RValSymbolWalk()).walk(this.parse())
     }
+
+    /** Returns true if the definition is correctly non-recursive. */
+    isNotRecursive(): boolean {
+        const uses = this.uses()
+        const defines = this.defines()
+
+        for ( const define of defines ) {
+            if ( uses.some(x => x.name === define.name) ) {
+                return false
+            }
+        }
+
+        return true
+    }
 }

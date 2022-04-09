@@ -6,12 +6,11 @@ import Katex from './Katex.vue'
 
 const props = defineProps<{
   statement: MathStatement,
-  evaluation: EvaluationResult,
-  renderVersion: number,
+  evaluation?: EvaluationResult,
 }>()
 
 const getValueStatement = (): Maybe<MathStatement> => {
-  const value = props.evaluation.statements[props.statement.id]
+  const value = props.evaluation?.statements?.[props.statement.id]
   if ( value ) {
     return MathStatement.temp(String(value))
   }

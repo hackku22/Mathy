@@ -1,3 +1,60 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+import WrapperBox from '../components/WrapperBox.vue'
+import {MathPage} from '../support/page'
+import {MathStatement} from '../support/parse'
+import Katex from '../components/Katex.vue'
+import {EvaluationResult, StatementID} from '../types'
+import Statement from '../components/Statement.vue'
+import VarDeclEditor from './VarDeclEditor.vue'
+import ExpressionEditor from './ExpressionEditor.vue'
+
+const math = new MathPage(uuidv4())
+const statements = ref<MathStatement[]>([])
+const evaluation = ref<EvaluationResult|undefined>()
+const statementsKey = ref<string>(uuidv4())
+
+const leftDrawerOpen = ref(false);
+
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+const newVariableModalOpen = ref(false)
+const openNewVariableDeclModal = () => {
+  newVariableModalOpen.value = true
+}
+
+const newExpressionModalOpen = ref(false)
+const openNewExpressionModal = () => {
+  newExpressionModalOpen.value = true
+}
+
+const updateStatements = () => {
+  statements.value = math.getStatements()
+  try {
+    evaluation.value = math.evaluate()
+  } catch (_) {
+    evaluation.value = undefined
+  }
+  statementsKey.value = uuidv4()
+}
+
+const saveNewVariable = (stmt: MathStatement) => {
+  math.addStatement(stmt)
+  newVariableModalOpen.value = false
+  updateStatements()
+}
+
+const saveNewExpression = (stmt: MathStatement) => {
+  math.addStatement(stmt)
+  newExpressionModalOpen.value = false
+  updateStatements()
+}
+
+</script>
+
 <template>
   <q-layout view="hHh Lpr fff">
     <q-header reveal bordered class="bg-primary text-white" height-hint="98">
@@ -32,7 +89,49 @@
     </q-drawer>
 
     <q-page-container>
-      <WrapperBox />
+<!--      <WrapperBox />-->
+
+      <Draggable
+        v-for="statement in statements"
+        :grid="[25, 25]"
+      >
+        <Statement
+          :key="statementsKey"
+          :statement="statement"
+          :evaluation="evaluation"
+        />
+      </Draggable>
+
+      <q-dialog v-model="newVariableModalOpen">
+        <VarDeclEditor
+          v-on:save="s => saveNewVariable(s)"
+        />
+      </q-dialog>
+
+      <q-dialog v-model="newExpressionModalOpen">
+        <ExpressionEditor
+          v-on:save="s => saveNewExpression(s)"
+        />
+      </q-dialog>
+
+      <q-page-sticky position="bottom-right" :offset="[32, 32]">
+        <q-fab color="primary" icon="add" direction="left">
+          <q-fab-action
+              color="secondary"
+              label="x"
+              label-style="font-family: serif; font-size: 1.4em; padding: 0"
+              title="Add a variable declaration"
+              @click="() => openNewVariableDeclModal()"
+          />
+          <q-fab-action
+            color="secondary"
+            icon="code"
+            label-style="font-family: serif; font-size: 1.4em; padding: 0"
+            title="Add an expression"
+            @click="() => openNewExpressionModal()"
+          />
+        </q-fab>
+      </q-page-sticky>
     </q-page-container>
 
     <q-footer reveal elevated class="bg-grey-8 text-white">
@@ -44,14 +143,3 @@
     </q-footer>
   </q-layout>
 </template>
-
-<script setup lang="ts">
-import { ref } from "vue";
-import WrapperBox from "../components/WrapperBox.vue";
-
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
-</script>
