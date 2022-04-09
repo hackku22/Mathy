@@ -80,3 +80,14 @@ export type Integer = TypeTag<'@app.Integer'> & number
 export function isInteger(num: number): num is Integer {
     return !isNaN(num) && parseInt(String(num), 10) === num
 }
+
+export type LaTeXString = TypeTag<'@app.LaTeXString'> & string
+export type HTMLString = TypeTag<'@app.HTMLString'> & string
+export type StatementID = TypeTag<'@app.StatementID'> & string
+export type VariableName = TypeTag<'@app.VariableName'> & string
+export type EvaluatedValue = TypeTag<'@app.EvaluatedValue'> & string
+
+export interface EvaluationResult {
+    variables: Record<VariableName, any>
+    statements: Record<StatementID, any>
+}
