@@ -2,6 +2,8 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import HelloWorld from './components/HelloWorld.vue'
+import { MathStatement } from './support/parse'
+console.log('math statement', MathStatement)
 </script>
 
 <template>
@@ -11,10 +13,10 @@ import HelloWorld from './components/HelloWorld.vue'
 
   <div id = "main">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <git msg="Hello Vue 3 + TypeScript + Vite" />
+<!--    <git msg="Hello Vue 3 + TypeScript + Vite" />-->
   </div>
 
-  
+
 </template>
 
 <style>
