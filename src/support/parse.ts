@@ -1,6 +1,7 @@
 import * as math from 'mathjs'
 import katex from 'katex'
 import {HTMLString, LaTeXString, StatementID} from '../types'
+import {v4 as uuidv4} from 'uuid'
 
 /** Base class for walks over MathNode trees. */
 export abstract class MathNodeWalk<TReturn> {
@@ -258,6 +259,10 @@ export class LValSymbolWalk extends SymbolWalk {
 
 /** A single mathematical statement. */
 export class MathStatement {
+    static temp(raw: string): MathStatement {
+        return new MathStatement(uuidv4() as StatementID, raw)
+    }
+
     constructor(
         /** Unique ID of this statement. */
         public readonly id: StatementID,

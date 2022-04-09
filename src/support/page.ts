@@ -2,7 +2,7 @@ import {MathStatement} from './parse'
 import * as math from 'mathjs'
 import {DepGraph} from 'dependency-graph'
 import { v4 as uuidv4 } from 'uuid'
-import {EvaluationResult, StatementID, VariableName} from '../types'
+import {EvaluationResult, Maybe, StatementID, VariableName} from '../types'
 
 /**
  * Wrapper for a page containing multiple interrelated mathematical statements.
@@ -16,6 +16,11 @@ export class MathPage {
         public readonly id: string,
     ) {}
 
+    /** Get a statement by ID if it exists. */
+    getStatement(id: StatementID): Maybe<MathStatement> {
+        return this.statements[id]
+    }
+
     /** Add a statement to this page. */
     addStatement(statement: MathStatement): this {
         this.statements[statement.id] = statement
@@ -23,8 +28,10 @@ export class MathPage {
     }
 
     /** Parse the math expression and add it to the page as a statement. */
-    addRaw(statement: string): this {
-        return this.addStatement(new MathStatement(uuidv4() as StatementID, statement))
+    addRaw(statement: string): StatementID {
+        const stmt = new MathStatement(uuidv4() as StatementID, statement)
+        this.addStatement(stmt)
+        return stmt.id
     }
 
     /** Get all symbols referenced by statements on this page. */
