@@ -12,11 +12,12 @@ export default defineConfig({
         },
     },
     plugins: [
-      vue({
-          template: { transformAssetUrls },
-      }),
+        vue({
+            template: { transformAssetUrls },
+        }),
 
-      quasar({
-          sassVariables: 'src/quasar-variables.sass',
-      }),]
+        quasar({
+            sassVariables: 'src/quasar-variables.sass',
+        }),
+    ],
 })
