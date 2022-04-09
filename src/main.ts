@@ -4,9 +4,17 @@ import { DraggablePlugin } from '@braks/revue-draggable'
 import { createAuth0 } from '@auth0/auth0-vue'
 import router from './router'
 
-
+import 'vuetify/styles' // Global CSS has to be imported
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 
 const app = createApp(App)
+const vuetify = createVuetify({
+    components,
+    directives,
+}) // Replaces new Vuetify(...)
+app.use(vuetify)
 
 app.use(
     createAuth0({
