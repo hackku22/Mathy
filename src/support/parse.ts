@@ -300,6 +300,16 @@ export class MathStatement {
         return node
     }
 
+    /** Returns true if the expression is valid. */
+    isValid(): boolean {
+        try {
+            this.toHTMLString()
+            return true
+        } catch (_) {
+            return false
+        }
+    }
+
     /** Get all symbols referenced in this statement. */
     symbols(): math.SymbolNode[] {
         return (new SymbolWalk()).walk(this.parse())
