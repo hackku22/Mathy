@@ -253,6 +253,7 @@ export class LValSymbolWalk extends SymbolWalk {
 
 export class MathStatement {
     constructor(
+        public readonly id: string,
         public readonly raw: string,
     ) {}
 
