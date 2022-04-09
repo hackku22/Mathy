@@ -10,11 +10,24 @@ import { MathPage } from './support/page'
 </script>
 
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/scratch">Scratch Testing</router-link>
-  </div>
-  <router-view/>
+
+
+
+   <v-app>
+    <v-app-bar height="30" color="grey-darken-3" elevation="0">
+      <div id="nav">
+        <router-link class="links" to="/">Home</router-link> |
+        <router-link class="links" to="/scratch">Scratch Testing</router-link> |
+        <router-link class="links" to="/editor">Editor</router-link>
+      </div>
+    </v-app-bar>
+
+    <v-main>
+      <v-card elevation="0" height="400px">
+          <router-view/>
+      </v-card>
+    </v-main>
+  </v-app>
 </template>
 
 <style>
@@ -26,5 +39,10 @@ import { MathPage } from './support/page'
   color: #2c3e50;
   margin-top: 60px;
 }
-
+.links {
+  color: #fff;
+}
+.links:visited{
+  color: #fff;
+}
 </style>

@@ -12,6 +12,12 @@ const routes = [
         name: 'Scratch',
         component: () => import(/* webpackChunkName: "scratch" */ './components/Scratch.vue'),
     },
+
+    {
+        path: '/editor',
+        name: 'Editor',
+        component: () => import(/* webpackChunkName: "scratch" */ './components/Editor.vue'),
+    },
 ]
 
 const router = createRouter({
