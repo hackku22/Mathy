@@ -10,7 +10,7 @@ const props = defineProps({
   <Draggable :grid="[25, 25]">
     <div style="display: flex">
       <q-card flat bordered>
-        <q-card-section>
+        <q-card-section style="padding:0">
           <div class="row items-center no-wrap">
             <q-card-section v-html="props.statement" />
             <div class="col-auto">

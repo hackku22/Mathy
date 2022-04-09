@@ -30,7 +30,7 @@ import { ref } from "vue";
       </q-tabs>
     </q-header>
 
-    <q-page-container>
+    <q-page-container style="display: flex;padding-top: 20px;">
       <router-view />
     </q-page-container>
   </q-layout>

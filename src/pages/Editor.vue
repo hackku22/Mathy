@@ -13,7 +13,7 @@ function toggleLeftDrawer() {
   Rich Text Stuff
 */
 
-const richTextStatments = ref([
+const richTextStatements = ref([
   { text: "test" },
   { text: "test2" },
   { text: "test3" },
@@ -23,15 +23,15 @@ const richEditModal = ref(false);
 const richEditExpression = ref("");
 const richEditID = ref(0);
 
-const richEditStatement = (id: int) => {
+const richEditStatement = (id: number) => {
   console.log("editing statement", id, richEditModal);
   richEditModal.value = true;
   richEditID.value = id;
-  richEditExpression.value = richTextStatments.value[richEditID.value].text;
+  richEditExpression.value = richTextStatements.value[richEditID.value].text;
 };
 
 function richUpdateValue() {
-  richTextStatments.value[richEditID.value].text = richEditExpression.value;
+  richTextStatements.value[richEditID.value].text = richEditExpression.value;
 }
 </script>
 
@@ -76,7 +76,7 @@ function richUpdateValue() {
           </q-card-actions>
         </q-card>
       </q-dialog>
-      <span v-for="(item, index) in richTextStatments">
+      <span v-for="(item, index) in richTextStatements">
         <TextBox
           :statement="item.text"
           v-on:edit="() => (item.text ? richEditStatement(index) : {})"
