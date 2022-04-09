@@ -14,8 +14,8 @@ const vuetify = createVuetify({
     components,
     directives,
     theme: {
-        defaultTheme: 'dark'
-      }
+        defaultTheme: 'dark',
+    },
 }) // Replaces new Vuetify(...)
 app.use(vuetify)
 

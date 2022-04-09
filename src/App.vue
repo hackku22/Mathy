@@ -19,13 +19,9 @@ import { MathPage } from "./support/page";
       </div>
     </v-app-bar>
 
-    <v-main>
-      
-      <v-card elevation="0" height="h-100">
-          <router-view />
-
-      </v-card>
-    </v-main>
+    <div style="margin-top: 30px">  <!-- Account for the navbar height -->
+      <router-view/>
+    </div>
   </v-app>
 </template>
 
@@ -35,8 +31,9 @@ import { MathPage } from "./support/page";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 .links {
   color: #fff;
