@@ -8,7 +8,9 @@
     "prepare": "pnpm run build",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint --fix . --ext .ts",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docker:build": "pnpm run build && docker image build . -t glmdev/mathy",
+    "docker:push": "docker push glmdev/mathy"
   },
   "dependencies": {
     "@vuetify/vite-plugin": "1.0.0-alpha.10",
