@@ -47,7 +47,7 @@ computed(() => value = getValueStatement())
 </style>
 
 <template>
-  <div class="math-statement">
+  <div class="math-statement" style="background: white">
     <div class="content">
       <Katex :statement="statement" size="big"/>
       <div class="result" v-if="value">

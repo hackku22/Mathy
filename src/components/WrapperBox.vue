@@ -16,9 +16,7 @@ function increment() {
       <div>Grid with component</div>
 
         <q-btn @click="increment">Count is: {{ count }}</q-btn>
-        <q-card class="my-card">
-            hi
-        </q-card>
+
     </div>
   </Draggable>
 </template>

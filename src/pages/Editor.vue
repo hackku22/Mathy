@@ -9,12 +9,12 @@ import {EvaluationResult, StatementID} from '../types'
 import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
+import TextBox from '../components/TextBox.vue'
 
 const math = new MathPage(uuidv4())
 const statements = ref<MathStatement[]>([])
 const evaluation = ref<EvaluationResult|undefined>()
 const statementsKey = ref<string>(uuidv4())
-
 const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {
@@ -53,6 +53,30 @@ const saveNewExpression = (stmt: MathStatement) => {
   updateStatements()
 }
 
+/*
+  Rich Text Stuff
+*/
+
+const richTextStatments = ref([
+  { text: "test" },
+  { text: "test2" },
+  { text: "test3" },
+]);
+
+const richEditModal = ref(false);
+const richEditExpression = ref("");
+const richEditID = ref(0);
+
+const richEditStatement = (id: number) => {
+  console.log("editing statement", id, richEditModal);
+  richEditModal.value = true;
+  richEditID.value = id;
+  richEditExpression.value = richTextStatments.value[richEditID.value].text;
+};
+
+function richUpdateValue() {
+  richTextStatments.value[richEditID.value].text = richEditExpression.value;
+}
 </script>
 
 <template>
@@ -76,9 +100,7 @@ const saveNewExpression = (stmt: MathStatement) => {
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <div class="column" style="height: 100%">
-        <div class="col">
-          variables
-        </div>
+        <div class="col">variables</div>
         <div class="col">
           <q-separator />
           function
@@ -88,19 +110,20 @@ const saveNewExpression = (stmt: MathStatement) => {
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container id="editor" style="display: flex">
 <!--      <WrapperBox />-->
 
-      <Draggable
-        v-for="statement in statements"
-        :grid="[25, 25]"
-      >
-        <Statement
-          :key="statementsKey"
-          :statement="statement"
-          :evaluation="evaluation"
-        />
-      </Draggable>
+      <span v-for="statement in statements">
+        <Draggable
+            :grid="[25, 25]"
+        >
+          <Statement
+            :key="statementsKey"
+            :statement="statement"
+            :evaluation="evaluation"
+          />
+        </Draggable>
+      </span>
 
       <q-dialog v-model="newVariableModalOpen">
         <VarDeclEditor
@@ -132,6 +155,22 @@ const saveNewExpression = (stmt: MathStatement) => {
           />
         </q-fab>
       </q-page-sticky>
+
+      <q-dialog v-model="richEditModal">
+        <q-card>
+          <q-editor v-model="richEditExpression" min-height="5rem" />
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancel" v-close-popup></q-btn>
+            <q-btn flat label="Save" @click="richUpdateValue" v-close-popup></q-btn>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+      <span v-for="(item, index) in richTextStatments">
+        <TextBox
+          :statement="item.text"
+          v-on:edit="() => (item.text ? richEditStatement(index) : {})"
+        ></TextBox>
+      </span>
     </q-page-container>
 
     <q-footer reveal elevated class="bg-grey-8 text-white">
@@ -143,3 +182,11 @@ const saveNewExpression = (stmt: MathStatement) => {
     </q-footer>
   </q-layout>
 </template>
+
+<style>
+#editor {
+  background-image: url(../assets/grid.svg);
+  background-repeat: repeat;
+  height: 100%;
+}
+</style>
