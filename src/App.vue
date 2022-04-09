@@ -4,9 +4,6 @@ import { MathPage } from "./support/page";
 (window as any).Stmt = MathStatement;
 (window as any).Pg = MathPage;
 
-  theme: {
-    defaultTheme: 'dark'
-  }
 </script>
 
 <template>
