@@ -1,6 +1,6 @@
 import * as math from 'mathjs'
 import katex from 'katex'
-import {HTMLString, LaTeXString} from '../types'
+import {HTMLString, LaTeXString, StatementID} from '../types'
 
 /** Base class for walks over MathNode trees. */
 export abstract class MathNodeWalk<TReturn> {
@@ -72,6 +72,7 @@ export abstract class MathNodeWalk<TReturn> {
 }
 
 
+/** A walk that accumulates all different SymbolNode instances in a tree. */
 export class SymbolWalk extends MathNodeWalk<math.SymbolNode[]> {
     walkAccessorNode(node: math.AccessorNode): math.SymbolNode[] {
         return [
@@ -168,6 +169,7 @@ export class SymbolWalk extends MathNodeWalk<math.SymbolNode[]> {
 }
 
 
+/** A walk that accumulates all SymbolNode instances used on the RHS of expressions. */
 export class RValSymbolWalk extends SymbolWalk {
     walkAssignmentNode(node: math.AssignmentNode): math.SymbolNode[] {
         return this.walk(node.value)
@@ -184,6 +186,7 @@ export class RValSymbolWalk extends SymbolWalk {
 }
 
 
+/** A walk that accumulates SymbolNode instances used on the LHS of assignments. */
 export class LValSymbolWalk extends SymbolWalk {
     walkAccessorNode(): math.SymbolNode[] {
         return []
@@ -252,26 +255,35 @@ export class LValSymbolWalk extends SymbolWalk {
     }
 }
 
+
+/** A single mathematical statement. */
 export class MathStatement {
     constructor(
-        public readonly id: string,
+        /** Unique ID of this statement. */
+        public readonly id: StatementID,
+
+        /** The raw statement input by the user. */
         public readonly raw: string,
     ) {}
 
+    /** Parse the raw statement to an AST. */
     parse(): math.MathNode {
         return math.parse(this.raw)
     }
 
+    /** Convert the statement to its equivalent LaTeX code. */
     toLaTeX(): LaTeXString {
         return this.parse().toTex() as LaTeXString
     }
 
+    /** Render the statement as HTML string. */
     toHTMLString(): HTMLString {
         return katex.renderToString(this.toLaTeX(), {
             output: 'mathml',
         }) as HTMLString
     }
 
+    /** Render the statement to a DOM element. */
     toDOM(): HTMLSpanElement {
         const node = document.createElement('span')
         katex.render(this.toLaTeX(), node, {
@@ -280,14 +292,17 @@ export class MathStatement {
         return node
     }
 
+    /** Get all symbols referenced in this statement. */
     symbols(): math.SymbolNode[] {
         return (new SymbolWalk()).walk(this.parse())
     }
 
+    /** Get all symbols defined on the LHS of this statement. */
     defines(): math.SymbolNode[] {
         return (new LValSymbolWalk()).walk(this.parse())
     }
 
+    /** Get all symbols used on the RHS of this statement. */
     uses(): math.SymbolNode[] {
         return (new RValSymbolWalk()).walk(this.parse())
     }

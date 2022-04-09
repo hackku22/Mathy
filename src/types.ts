@@ -83,3 +83,10 @@ export function isInteger(num: number): num is Integer {
 
 export type LaTeXString = TypeTag<'@app.LaTeXString'> & string
 export type HTMLString = TypeTag<'@app.HTMLString'> & string
+export type StatementID = TypeTag<'@app.StatementID'> & string
+export type VariableName = TypeTag<'@app.VariableName'> & string
+
+export interface EvaluationResult {
+    variables: Record<VariableName, any>
+    statements: Record<StatementID, any>
+}
