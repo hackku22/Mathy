@@ -7,6 +7,11 @@ const routes = [
         name: 'Home',
         component: Home,
     },
+    {
+        path: '/scratch',
+        name: 'Scratch',
+        component: () => import(/* webpackChunkName: "scratch" */ './components/Scratch.vue'),
+    },
 ]
 
 const router = createRouter({
