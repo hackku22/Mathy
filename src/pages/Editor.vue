@@ -3,18 +3,18 @@ import {onMounted, ref} from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import {MathPage} from '../support/page'
 import {MathStatement} from '../support/parse'
-import {EvaluationResult, hasOwnProperty} from '../types'
+import {EvaluationResult, hasOwnProperty} from '../support/types'
 import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
-import {RichTextBox} from '../types'
+import {RichTextBox} from '../support/types'
 import { stepX, stepY } from '../support/const'
 
-const math = new MathPage(uuidv4())
-const statements = ref<MathStatement[]>([])
-const evaluation = ref<EvaluationResult|undefined>()
-const statementsKey = ref<string>(uuidv4())
+const math = new MathPage(uuidv4());
+const statements = ref<MathStatement[]>([]);
+const evaluation = ref<EvaluationResult | undefined>();
+const statementsKey = ref<string>(uuidv4());
 const leftDrawerOpen = ref(false);
 
 const variableListingColumns = [
@@ -37,15 +37,15 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
-const newVariableModalOpen = ref(false)
+const newVariableModalOpen = ref(false);
 const openNewVariableDeclModal = () => {
-  newVariableModalOpen.value = true
-}
+  newVariableModalOpen.value = true;
+};
 
-const newExpressionModalOpen = ref(false)
+const newExpressionModalOpen = ref(false);
 const openNewExpressionModal = () => {
-  newExpressionModalOpen.value = true
-}
+  newExpressionModalOpen.value = true;
+};
 
 const editingStatement = ref<MathStatement|undefined>()
 const editExpressionModalOpen = ref(false)
@@ -59,7 +59,7 @@ const openEditVarDeclModal = () => {
 }
 
 const updateStatements = () => {
-  statements.value = math.getStatements()
+  statements.value = math.getStatements();
   try {
     evaluation.value = math.evaluate()
     const variableValues: ({name: string, value: string})[] = []
@@ -82,24 +82,24 @@ const updateStatements = () => {
 
     variableListingRows.value = variableValues
   } catch (_) {
-    evaluation.value = undefined
+    evaluation.value = undefined;
   }
-  statementsKey.value = uuidv4()
-}
+  statementsKey.value = uuidv4();
+};
 
 onMounted(updateStatements)
 
 const saveNewVariable = (stmt: MathStatement) => {
-  math.addStatement(stmt)
-  newVariableModalOpen.value = false
-  updateStatements()
-}
+  math.addStatement(stmt);
+  newVariableModalOpen.value = false;
+  updateStatements();
+};
 
 const saveNewExpression = (stmt: MathStatement) => {
-  math.addStatement(stmt)
-  newExpressionModalOpen.value = false
-  updateStatements()
-}
+  math.addStatement(stmt);
+  newExpressionModalOpen.value = false;
+  updateStatements();
+};
 
 const editStatement = (stmt: MathStatement) => {
   editingStatement.value = stmt
@@ -126,11 +126,15 @@ const finishEditStatement = () => {
   Rich Text Stuff
 */
 
-const richTextStatements = ref([
-  new RichTextBox('newText'),
-  new RichTextBox('newText', 0,100)
+const makeNewRichTextBox = () => {
+  richTextStatements.value.push(new RichTextBox(""));
+  richEditID.value = richTextStatements.value.length - 1;
+  richEditExpression.value = richTextStatements.value[richEditID.value].text;
+  richEditModal.value = true;
+  console.log("editing statement",richEditID.value, richEditModal);
+};
 
-  ]);
+const richTextStatements = ref([new RichTextBox("Hello World")]);
 
 const richEditModal = ref(false);
 const richEditExpression = ref("");
@@ -146,7 +150,9 @@ const richEditStatement = (id: number) => {
 function richUpdateValue() {
   richTextStatements.value[richEditID.value].text = richEditExpression.value;
 }
-
+const removeRichTextBox = (id: number) => {
+  richTextStatements.value.splice(id, 1);
+};
 </script>
 
 <template>
@@ -222,36 +228,31 @@ function richUpdateValue() {
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container id="editor" >
-<!--      <WrapperBox />-->
+    <q-page-container id="editor">
+      <!--      <WrapperBox />-->
 
       <span v-for="statement in statements" style="display: flex">
         <Draggable
-            :grid="[stepX, stepY]"
+          :grid="[stepX, stepY]"
         >
-        <div>
-          <Statement
-            :key="statementsKey"
-            :statement="statement"
-            :evaluation="evaluation"
-            v-on:edit="() => editStatement(statement)"
-            v-on:remove="() => removeStatement(statement)"
-          />
-        </div>
-
+          <div>
+            <Statement
+              :key="statementsKey"
+              :statement="statement"
+              :evaluation="evaluation"
+              v-on:edit="() => editStatement(statement)"
+              v-on:remove="() => removeStatement(statement)"
+            />
+          </div>
         </Draggable>
       </span>
 
       <q-dialog v-model="newVariableModalOpen">
-        <VarDeclEditor
-          v-on:save="s => saveNewVariable(s)"
-        />
+        <VarDeclEditor v-on:save="(s) => saveNewVariable(s)" />
       </q-dialog>
 
       <q-dialog v-model="newExpressionModalOpen">
-        <ExpressionEditor
-          v-on:save="s => saveNewExpression(s)"
-        />
+        <ExpressionEditor v-on:save="(s) => saveNewExpression(s)" />
       </q-dialog>
 
       <q-dialog v-model="editExpressionModalOpen">
@@ -271,18 +272,23 @@ function richUpdateValue() {
       <q-page-sticky position="bottom-right" :offset="[32, 32]">
         <q-fab color="primary" icon="add" direction="left">
           <q-fab-action
-              color="secondary"
-              label="x"
-              label-style="font-family: serif; font-size: 1.4em; padding: 0"
-              title="Add a variable declaration"
-              @click="() => openNewVariableDeclModal()"
+            color="secondary"
+            label="x"
+            label-style="font-family: serif; font-size: 1.4rem; padding: 0"
+            title="Add a variable declaration"
+            @click="() => openNewVariableDeclModal()"
           />
           <q-fab-action
             color="secondary"
             icon="code"
-            label-style="font-family: serif; font-size: 1.4em; padding: 0"
             title="Add an expression"
             @click="() => openNewExpressionModal()"
+          />
+          <q-fab-action
+            color="secondary"
+            icon="text"
+            title="Add a Text Box"
+            @click="() => makeNewRichTextBox()"
           />
         </q-fab>
       </q-page-sticky>
@@ -292,16 +298,22 @@ function richUpdateValue() {
           <q-editor v-model="richEditExpression" min-height="5rem" />
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancel" v-close-popup></q-btn>
-            <q-btn flat label="Save" @click="richUpdateValue" v-close-popup></q-btn>
+            <q-btn
+              flat
+              label="Save"
+              @click="richUpdateValue"
+              v-close-popup
+            ></q-btn>
           </q-card-actions>
         </q-card>
       </q-dialog>
+
       <div v-for="(item, index) in richTextStatements" style="display: flex">
         <TextBox
           :value="item"
           v-on:edit="() => (item.text ? richEditStatement(index) : {})"
+          v-on:remove="() => removeRichTextBox(index)"
         />
-
       </div>
     </q-page-container>
 

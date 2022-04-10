@@ -3,7 +3,7 @@ import {defineEmits, onMounted, ref} from 'vue'
 import {MathStatement} from '../support/parse'
 import Katex from '../components/Katex.vue'
 import { v4 as uuidv4 } from 'uuid'
-import {StatementID} from '../types'
+import {StatementID} from '../support/types'
 
 const props = defineProps<{
   statement?: MathStatement,

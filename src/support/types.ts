@@ -96,9 +96,18 @@ export interface EvaluationResult {
 export class RichTextBox {
     constructor(
         public text: string = '',
-        public x: Number = 0,
-        public y: Number = 0,
-        ) {
-   
-    }
+        public x: number = 0,
+        public y: number = 0,
+    ) {}
 }
+
+
+export class ImageBox {
+    constructor(
+        public text: string = '',
+        public x: number = 0,
+        public y: number = 0,
+    ) {}
+}
+
+

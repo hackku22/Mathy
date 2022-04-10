@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {EvaluationResult, Maybe} from '../types'
+import {EvaluationResult, Maybe} from '../support/types'
 import {MathStatement} from '../support/parse'
 import {computed} from 'vue'
 import Katex from './Katex.vue'

@@ -1,6 +1,6 @@
 import * as math from 'mathjs'
 import katex from 'katex'
-import {HTMLString, LaTeXString, StatementID} from '../types'
+import {HTMLString, LaTeXString, StatementID} from './types'
 import {v4 as uuidv4} from 'uuid'
 
 /** Base class for walks over MathNode trees. */
