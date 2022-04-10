@@ -20,8 +20,8 @@ import '@quasar/extras/material-icons/material-icons.css'
 import '@quasar/extras/fontawesome-v6/fontawesome-v6.css'
 
 // A few examples for animations from Animate.css:
-// import @quasar/extras/animate/fadeIn.css
-// import @quasar/extras/animate/fadeOut.css
+import '@quasar/extras/animate/fadeInUp.css'
+import '@quasar/extras/animate/fadeOutUp.css'
 
 // Import Quasar css
 import 'quasar/src/css/index.sass'
@@ -54,7 +54,7 @@ app.use(
     createAuth0({
         domain: 'dev-ge84r-eu.us.auth0.com',
         client_id: 'zHjZGg1uPws0DkQg5bRdKcDX8m6AuTZl', // eslint-disable-line camelcase
-        redirect_uri: window.location.origin + '/auth', // eslint-disable-line camelcase
+        redirect_uri: window.location.origin + '/api/login/callback', // eslint-disable-line camelcase
     }),
 )
 

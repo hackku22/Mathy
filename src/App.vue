@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import Home from "./pages/Login.vue";
+import Home from "./pages/Home.vue";
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from "./components/HelloWorld.vue";
 import { MathStatement } from "./support/parse";
 import { MathPage } from "./support/page";
 import { ref } from "vue";
