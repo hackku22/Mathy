@@ -110,11 +110,11 @@ onMounted(() => {
     </q-card-actions>
     <q-card-section class="text-center q-pa-none">
         <p class="text-grey-6">
-            {{ isRegistration ? 'Have an account?' : 'Not reigistered?' }}
+            {{ isRegistration ? 'Have an account?' : 'Not registered?' }}
             <a
                 href="#"
                 @click="isRegistration = !isRegistration; checkForm()"
-            >{{ isRegistration ? 'Login' : 'Created an Account' }}</a>
+            >{{ isRegistration ? 'Login' : 'Create an Account' }}</a>
         </p>
     </q-card-section>
 </template>
