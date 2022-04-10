@@ -12,6 +12,8 @@ import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
 import {RichTextBox} from "../support/types";
 import { stepX, stepY } from "../support/const";
+import { checkLoggedIn, loggedOut } from '../support/auth'
+import router from '../router'
 
 const math = new MathPage(uuidv4());
 const statements = ref<MathStatement[]>([]);
@@ -78,7 +80,9 @@ const updateStatements = () => {
   statementsKey.value = uuidv4();
 };
 
-onMounted(updateStatements)
+onMounted(() => {
+  updateStatements() 
+  })
 
 const saveNewVariable = (stmt: MathStatement) => {
   math.addStatement(stmt);
@@ -123,6 +127,31 @@ function richUpdateValue() {
 const removeRichTextBox = (id: number) => {
   richTextStatements.value.splice(id, 1);
 };
+
+/*
+  Auth
+*/
+const status = ref(checkLoggedIn())
+const logout = async () => {
+  const response = await fetch('/api/logout/', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+    },
+  })
+  loggedOut()
+  status.value = checkLoggedIn()
+  router.push('/')
+}
+
+onMounted(() => {
+  status.value = checkLoggedIn()
+  console.log(status.value)
+  if (status.value == false ) {
+    router.push({path: '/'})
+  }
+})
+
 </script>
 
 <template>
@@ -138,9 +167,10 @@ const removeRichTextBox = (id: number) => {
           Title
         </q-toolbar-title>
       </q-toolbar>
-      <q-tabs align="left">
+      <q-tabs>
         <q-route-tab to="/Scratch" label="Scratch" />
         <q-route-tab to="/Editor" label="Editor" />
+        <q-tab v-if="status" @click="logout()" label="Logout" />
       </q-tabs>
     </q-header>
 

@@ -4,10 +4,51 @@ import Home from "./pages/Home.vue";
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { MathStatement } from "./support/parse";
 import { MathPage } from "./support/page";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { checkLoggedIn, loggedOut, loggedIn } from "./support/auth";
+import router from "./router";
 
 (window as any).Stmt = MathStatement;
 (window as any).Pg = MathPage;
+
+const status = ref(checkLoggedIn())
+
+; (async () => {
+    const response = await fetch('/api/login/status/', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+    const res = (await response.json()) as unknown as any
+    if (res.data.hasUser) {
+      loggedIn()
+    }
+    status.value = checkLoggedIn()
+  })()
+
+onMounted(() => {
+  status.value = checkLoggedIn()
+  console.log(status.value)
+})
+
+router.afterEach(() => {
+  status.value = checkLoggedIn()
+  console.log(status.value)
+})
+
+const logout = async () => {
+  const response = await fetch('/api/logout/', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+    },
+  })
+  loggedOut()
+  status.value = checkLoggedIn()
+  router.push({path: '/'})
+}
+
 </script>
 
 <template>
@@ -17,15 +58,14 @@ import { ref } from "vue";
         <q-toolbar-title>
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar>
-          Title
+          </q-avatar>Title
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs align="left">
+      <q-tabs>
         <q-route-tab to="/Scratch" label="Scratch" />
         <q-route-tab to="/Editor" label="Editor" />
-
+        <q-tab v-if="status" @click="logout()" label="Logout" />
       </q-tabs>
     </q-header>
 

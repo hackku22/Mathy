@@ -32,7 +32,6 @@ import 'quasar/src/css/index.sass'
 --------------------------------------------------
 */
 import { DraggablePlugin } from '@braks/revue-draggable'
-import { createAuth0 } from '@auth0/auth0-vue'
 
 import 'katex/dist/katex.min.css'
 import 'katex/dist/contrib/auto-render.min'
@@ -49,14 +48,6 @@ const app = createApp(App)
 app.use(Quasar, {
     plugins: {}, // import Quasar plugins and add here
 })
-
-app.use(
-    createAuth0({
-        domain: 'dev-ge84r-eu.us.auth0.com',
-        client_id: 'zHjZGg1uPws0DkQg5bRdKcDX8m6AuTZl', // eslint-disable-line camelcase
-        redirect_uri: window.location.origin + '/api/login/callback', // eslint-disable-line camelcase
-    }),
-)
 
 app.use(router)
 
