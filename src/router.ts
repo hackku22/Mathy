@@ -17,6 +17,11 @@ const routes = [
         name: 'Editor',
         component: () => import(/* webpackChunkName: "Editor" */ './pages/Editor.vue'),
     },
+    {
+        path: '/listings',
+        name: 'Listings',
+        component: () => import(/* webpackChunkName: "Listings" */ './pages/Listings.vue'),
+    },
 
 ]
 

@@ -44,7 +44,7 @@ const login = async () => {
         return user.message
     }
     loggedIn()
-    router.push({ path: '/Editor'})
+    router.push({ path: '/Listings'})
 }
 
 const register = async () => {
@@ -61,12 +61,12 @@ const register = async () => {
         return user.message
     }
     loggedIn()
-    router.push({ path: '/Editor'})
+    router.push({ path: '/Listings'})
 }
 
 onMounted(() => {
     if ( checkLoggedIn() ) {
-        router.push({ path: '/Editor'})
+        router.push({ path: '/Listings'})
     }
 })
 
