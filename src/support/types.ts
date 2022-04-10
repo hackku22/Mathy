@@ -98,7 +98,16 @@ export class RichTextBox {
         public text: string = '',
         public x: number = 0,
         public y: number = 0,
-    ) {
-
-    }
+    ) {}
 }
+
+
+export class ImageBox {
+    constructor(
+        public text: string = '',
+        public x: number = 0,
+        public y: number = 0,
+    ) {}
+}
+
+
