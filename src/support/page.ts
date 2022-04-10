@@ -128,6 +128,25 @@ export class MathPage {
             .filter(x => x.isFunctionDeclaration())
     }
 
+    /** Look up a function statement by name, if it exists. */
+    getFunctionByName(name: string): MathStatement|undefined {
+        for ( const fn of this.functions() ) {
+            const node = fn.parse() as math.FunctionAssignmentNode
+            if ( node.name === name ) {
+                return fn
+            }
+        }
+    }
+
+    /** Look up a function statement by name, if it exists. */
+    getFunctionByNameOrFail(name: string): MathStatement {
+        const fn = this.getFunctionByName(name)
+        if ( !fn ) {
+            throw new Error('Unable to find function with name: ' + name)
+        }
+        return fn
+    }
+
     /** Evaluate the current state of the page and get the result. */
     evaluate(): EvaluationResult {
         const evaluations: Record<StatementID, any> = {}
