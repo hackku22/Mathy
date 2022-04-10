@@ -138,6 +138,15 @@ export class MathPage {
         }
     }
 
+    /** Look up a function statement by name, if it exists. */
+    getFunctionByNameOrFail(name: string): MathStatement {
+        const fn = this.getFunctionByName(name)
+        if ( !fn ) {
+            throw new Error('Unable to find function with name: ' + name)
+        }
+        return fn
+    }
+
     /** Evaluate the current state of the page and get the result. */
     evaluate(): EvaluationResult {
         const evaluations: Record<StatementID, any> = {}
