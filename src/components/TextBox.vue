@@ -2,32 +2,32 @@
 import { ref } from "vue";
 import { RichTextBox } from "../support/types";
 import { stepX, stepY } from "../support/const";
-const props = defineProps<{value: RichTextBox}>();
+const props = defineProps<{ value: RichTextBox }>();
 
 const emit = defineEmits<{
-  (eventName: 'move', x: number,y:number): void,
+  (eventName: 'move', x: number, y: number): void,
   (eventName: 'edit',): void,
   (eventName: 'remove',): void,
 
 }>()
 
 
-function onControlledDrag(e: {event: MouseEvent, data: {x: number, y: number}}) {
-  
+function onControlledDrag(e: { event: MouseEvent, data: { x: number, y: number } }) {
+
   // const x = e.x;
   // const y = e.y;
-   const { x, y } = e.data;
-   props.value.x = x;
-   props.value.y = y;
-   console.log(e)
+  const { x, y } = e.data;
+  props.value.x = x;
+  props.value.y = y;
+  console.log(e)
 }
-function onControlledDragStop(e: {event: MouseEvent, data: {x: number, y: number}}) {
+function onControlledDragStop(e: { event: MouseEvent, data: { x: number, y: number } }) {
   // console.log(typeof(e))
-    const { x, y } = e.data;
-      // const x = e.x;
-    // const y = e.y;
-    console.log(self)
-    emit('move', x, y);
+  const { x, y } = e.data;
+  // const x = e.x;
+  // const y = e.y;
+  console.log(self)
+  emit('move', x, y);
   onControlledDrag(e);
 }
 
@@ -51,15 +51,11 @@ function onControlledDragStop(e: {event: MouseEvent, data: {x: number, y: number
                   <q-list>
                     <q-item clickable>
                       <q-item-section @click="() => $emit('edit')">
-                        <q-icon name="edit" />
                         <q-item-label>Edit</q-item-label>
-                      >Edit</q-item-section
-                      >
+                      </q-item-section>
                     </q-item>
                     <q-item clickable>
-                      <q-item-section @click="() => $emit('remove')"
-                      >Remove</q-item-section
-                      >
+                      <q-item-section @click="() => $emit('remove')">Remove</q-item-section>
                     </q-item>
                   </q-list>
                 </q-menu>
@@ -72,4 +68,6 @@ function onControlledDragStop(e: {event: MouseEvent, data: {x: number, y: number
   </Draggable>
 </template>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+
+</style>
