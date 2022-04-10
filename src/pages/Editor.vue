@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import WrapperBox from '../components/WrapperBox.vue'
 import {MathPage} from '../support/page'
 import {MathStatement} from '../support/parse'
 import Katex from '../components/Katex.vue'
-import {EvaluationResult, StatementID} from '../types'
+import {EvaluationResult, hasOwnProperty, StatementID} from '../types'
 import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
@@ -16,6 +16,22 @@ const statements = ref<MathStatement[]>([])
 const evaluation = ref<EvaluationResult|undefined>()
 const statementsKey = ref<string>(uuidv4())
 const leftDrawerOpen = ref(false);
+
+const variableListingColumns = [
+  {
+    name: 'name',
+    field: 'name',
+    label: 'Variable',
+    sortable: true,
+  },
+  {
+    name: 'value',
+    field: 'value',
+    label: 'Value',
+  },
+]
+
+const variableListingRows = ref<({name: string, value: string})[]>([])
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -35,11 +51,32 @@ const updateStatements = () => {
   statements.value = math.getStatements()
   try {
     evaluation.value = math.evaluate()
+    const variableValues: ({name: string, value: string})[] = []
+
+    for ( const name in evaluation.value!.variables ) {
+      if ( !hasOwnProperty(evaluation.value!.variables, name) ) {
+        continue
+      }
+
+      let value = String(evaluation.value!.variables[name] ?? '')
+      try {
+        value = MathStatement.temp(value).toHTMLString()
+      } catch (_) {}
+
+      variableValues.push({
+        name,
+        value,
+      })
+    }
+
+    variableListingRows.value = variableValues
   } catch (_) {
     evaluation.value = undefined
   }
   statementsKey.value = uuidv4()
 }
+
+onMounted(updateStatements)
 
 const saveNewVariable = (stmt: MathStatement) => {
   math.addStatement(stmt)
@@ -77,6 +114,7 @@ const richEditStatement = (id: number) => {
 function richUpdateValue() {
   richTextStatements.value[richEditID.value].text = richEditExpression.value;
 }
+
 </script>
 
 <template>
@@ -100,10 +138,52 @@ function richUpdateValue() {
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <div class="column" style="height: 100%">
-        <div class="col">variables</div>
         <div class="col">
-          <q-separator />
-          function
+          <q-table
+            flat
+            title="Variables"
+            :rows="variableListingRows"
+            :columns="variableListingColumns"
+            row-key="name"
+            hide-no-data
+            hide-bottom
+            :pagination="{rowsPerPage: 10000}"
+            style="height: 100%; border-radius: 0"
+          >
+            <template v-slot:body="props">
+              <q-tr :props="props">
+                <q-td key="name" :props="props">
+                  {{ props.row.name }}
+                </q-td>
+                <q-td key="value" :props="props">
+                  <div v-html="props.row.value"></div>
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+        </div>
+        <div class="col">
+<!--          <q-separator />-->
+          <q-table
+            flat
+            title="Functions"
+            row-key="name"
+            hide-no-data
+            hide-bottom
+            :pagination="{rowsPerPage: 10000}"
+            style="height: 100%; border-top: 1px solid lightgrey; border-radius: 0"
+          >
+            <template v-slot:body="props">
+              <q-tr :props="props">
+                <q-td key="name" :props="props">
+                  {{ props.row.name }}
+                </q-td>
+                <q-td key="value" :props="props">
+                  <div v-html="props.row.value"></div>
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
         </div>
       </div>
 
