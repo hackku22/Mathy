@@ -269,6 +269,9 @@ export class MathStatement {
 
         /** The raw statement input by the user. */
         public readonly raw: string,
+
+        public x: Number = 0,
+        public y: Number = 0,
     ) {}
 
     /** Parse the raw statement to an AST. */

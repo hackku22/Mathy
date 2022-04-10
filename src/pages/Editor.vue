@@ -10,6 +10,8 @@ import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
+import {RichTextBox} from "../types.ts";
+import { stepX, stepY } from "../support/const.ts";
 
 const math = new MathPage(uuidv4())
 const statements = ref<MathStatement[]>([])
@@ -95,10 +97,10 @@ const saveNewExpression = (stmt: MathStatement) => {
 */
 
 const richTextStatements = ref([
-  { text: "test" },
-  { text: "test2" },
-  { text: "test3" },
-]);
+  new RichTextBox('newText'),
+  new RichTextBox('newText', 0,100)
+
+  ]);
 
 const richEditModal = ref(false);
 const richEditExpression = ref("");
@@ -190,18 +192,21 @@ function richUpdateValue() {
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container id="editor" style="display: flex">
+    <q-page-container id="editor" >
 <!--      <WrapperBox />-->
 
-      <span v-for="statement in statements">
+      <span v-for="statement in statements" style="display: flex">
         <Draggable
-            :grid="[25, 25]"
+            :grid="[stepX, stepY]"
         >
+        <div>
           <Statement
             :key="statementsKey"
             :statement="statement"
             :evaluation="evaluation"
           />
+        </div>
+
         </Draggable>
       </span>
 
@@ -245,12 +250,13 @@ function richUpdateValue() {
           </q-card-actions>
         </q-card>
       </q-dialog>
-      <span v-for="(item, index) in richTextStatements">
+      <div v-for="(item, index) in richTextStatements" style="display: flex">
         <TextBox
-          :statement="item.text"
+          :value="item"
           v-on:edit="() => (item.text ? richEditStatement(index) : {})"
-        ></TextBox>
-      </span>
+        />
+
+      </div>
     </q-page-container>
 
     <q-footer reveal elevated class="bg-grey-8 text-white">
