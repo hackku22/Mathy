@@ -170,11 +170,12 @@ function richUpdateValue() {
           </q-card-actions>
         </q-card>
       </q-dialog>
-      <div v-for="(item, index) in richTextStatements">
+      <div v-for="(item, index) in richTextStatements" style="display: flex">
         <TextBox
           :value="item"
           v-on:edit="() => (item.text ? richEditStatement(index) : {})"
-        ></TextBox>
+        />
+
       </div>
     </q-page-container>
 
