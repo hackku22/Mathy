@@ -54,24 +54,22 @@ Dark.set(true)
 
 <template>
   <q-layout view="hHr LpR fFf">
-    <q-header elevated class="bg-primary text-white" >
+    <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar size="50px">
             <img src="./assets/l2.svg" />
           </q-avatar>
-          <span style="font-family: 'Cinzel Decorative', cursive;">
-            Crystal Math Worktable
-          </span>
-          <q-btn icon="fa-solid fa-arrow-up-left-from-circle" v-if="status" @click="logout()" label="Logout" />
+          <span style="font-family: 'Cinzel Decorative', cursive;">Crystal Math Worktable</span>
         </q-toolbar-title>
+        <q-btn v-if="status" @click="logout()" label="Logout"></q-btn>
       </q-toolbar>
 
       <!-- <q-tabs>
           <q-route-tab to="/Scratch" label="Scratch" />
           <q-route-tab to="/Editor" label="Editor" />
           <q-tab v-if="status" @click="logout()" label="Logout" />
-        </q-tabs> -->
+      </q-tabs>-->
     </q-header>
 
     <q-page-container style="display: flex;padding-top: 0px;">
@@ -93,6 +91,4 @@ Dark.set(true)
 .titleBar {
   font-family: "Cinzel Decorative";
 }
-
-
 </style>

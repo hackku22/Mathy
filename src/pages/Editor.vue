@@ -429,7 +429,7 @@ onMounted(() => {
           </span>
         </q-toolbar-title>
 
-        <span v-if="status" @click="logout()" label="Logout">Logout</span>
+        <q-btn v-if="status" @click="logout()" label="Logout"></q-btn>
       </q-toolbar>
     </q-header>
 
