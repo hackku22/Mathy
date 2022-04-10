@@ -515,6 +515,7 @@ onMounted(() => {
     <q-page-container id="editor" style='padding: 0'>
       <span v-for="(chartBox, index) in chartBoxes" style="display: flex">
         <RangeChart
+          :page="math"
           :fn="math.getFunctionByNameOrFail(chartBox.fnName)"
           :key="chartBoxKey"
           :value="chartBox"

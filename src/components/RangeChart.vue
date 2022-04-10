@@ -3,10 +3,11 @@ import * as math from 'mathjs'
 import { v4 as uuidv4 } from 'uuid'
 import { LineChart } from 'vue-chart-3'
 import { computed, ref } from 'vue'
-import { Chart, ChartData, ChartOptions, registerables } from 'chart.js'
+import { Chart, ChartData, registerables } from 'chart.js'
 import { MathStatement } from '../support/parse'
 import { ChartBox } from '../support/types'
 import { stepX, stepY } from '../support/const'
+import {MathPage} from '../support/page'
 
 Chart.register(...registerables)
 
@@ -17,6 +18,7 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps<{
+  page: MathPage,
   fn: MathStatement,
   value: ChartBox,
 }>()
@@ -69,27 +71,32 @@ const getChartData = (): ChartData<'line'> => {
     throw new TypeError('Cannot chart node that is not a function.')
   }
 
-  const node = props.fn.parse() as math.FunctionAssignmentNode
-  const fn = node.compile().evaluate()  // FIXME need dependencies in scope
+  try {
+    const evaluationResult = props.page.evaluate()
+    const node = props.fn.parse() as math.FunctionAssignmentNode
+    const fn = node.compile().evaluate(evaluationResult.scope)
 
-  console.log('getChartData', {
-    labels: range.map(x => `${x}`),
-    datasets: [
-      {
+    return {
+      labels: range.map(x => `${x}`),
+      datasets: [{
         label: node.name,
-        data: range.map(n => fn(n)),
-      },
-    ],
-  })
-  return {
-    labels: range.map(x => `${x}`),
-    datasets: [{
-      label: node.name,
-      backgroundColor: '#553564',
-      borderColor: '#ccc',
-      data: range.map(x => fn(x)),
-      pointRadius: 5
-    }],
+        backgroundColor: '#553564',
+        borderColor: '#ccc',
+        data: range.map(x => fn(x)),
+        pointRadius: 5
+      }],
+    }
+  } catch (_) {
+    return {
+      labels: [],
+      datasets: [{
+        label: '',
+        backgroundColor: '#553564',
+        borderColor: '#ccc',
+        data: [],
+        pointRadius: 5
+      }],
+    }
   }
 }
 

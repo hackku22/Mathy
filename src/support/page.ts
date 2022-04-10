@@ -197,6 +197,7 @@ export class MathPage {
         return {
             variables: nonFunctionalScope,
             statements: evaluations,
+            scope,
         }
     }
 }

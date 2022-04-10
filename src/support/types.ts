@@ -90,6 +90,7 @@ export type EvaluatedValue = TypeTag<'@app.EvaluatedValue'> & string
 export interface EvaluationResult {
     variables: Record<VariableName, any>
     statements: Record<StatementID, any>
+    scope: Record<VariableName, any>
 }
 
 
