@@ -3,7 +3,7 @@ import {onMounted, ref} from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import {MathPage} from '../support/page'
 import {MathStatement} from '../support/parse'
-import {EvaluationResult, hasOwnProperty} from '../support/types'
+import {ChartBox, EvaluationResult, hasOwnProperty} from '../support/types'
 import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
@@ -11,6 +11,8 @@ import TextBox from '../components/TextBox.vue'
 import {RichTextBox} from '../support/types'
 import { stepX, stepY } from '../support/const'
 import FunctionEditor from '../components/FunctionEditor.vue'
+import RangeChart from '../components/RangeChart.vue'
+import RangeChartEditor from './RangeChartEditor.vue'
 
 const math = new MathPage(uuidv4());
 const statements = ref<MathStatement[]>([]);
@@ -185,6 +187,39 @@ const makeNewRichTextBox = () => {
   richEditModal.value = true;
 };
 
+const chartBoxKey = ref(uuidv4())
+const chartBoxes = ref<ChartBox[]>([])
+
+const newChartModalOpen = ref(false)
+const openNewChartModal = () => {
+  newChartModalOpen.value = true
+}
+
+const saveNewChartBox = (chartBox: ChartBox) => {
+  chartBoxes.value.push(chartBox)
+  newChartModalOpen.value = false
+}
+
+const editingChartBox = ref<ChartBox|undefined>()
+const chartEditModalOpen = ref(false)
+const openChartEditModal = (box: ChartBox) => {
+  editingChartBox.value = box
+  chartEditModalOpen.value = true
+}
+
+const saveEditingChartBox = () => {
+  chartEditModalOpen.value = false
+  chartBoxKey.value = uuidv4()
+}
+
+const moveChartBox = (id: number, x: number, y: number) => {
+  chartBoxes.value[id].x = x
+  chartBoxes.value[id].y = y
+}
+const removeChartBox = (id: number) => {
+  chartBoxes.value.splice(id, 1);
+};
+
 const richTextStatements = ref<RichTextBox[]>([]);
 
 const richEditModal = ref(false);
@@ -290,6 +325,17 @@ const removeRichTextBox = (id: number) => {
     <q-page-container id="editor">
       <!--      <WrapperBox />-->
 
+      <span v-for="(chartBox, index) in chartBoxes" style="display: flex">
+        <RangeChart
+          :fn="math.getFunctionByName(chartBox.fnName)"
+          :key="chartBoxKey"
+          :value="chartBox"
+          v-on:move="(x, y) => moveChartBox(index, x, y)"
+          v-on:remove="() => removeChartBox(index)"
+          v-on:edit="() => openChartEditModal(chartBox)"
+        />
+      </span>
+
       <span v-for="statement in statements" style="display: flex">
         <Draggable
           :grid="[stepX, stepY]"
@@ -344,6 +390,21 @@ const removeRichTextBox = (id: number) => {
         />
       </q-dialog>
 
+      <q-dialog v-model="newChartModalOpen">
+        <RangeChartEditor
+          :page="math"
+          v-on:save="c => saveNewChartBox(c)"
+        />
+      </q-dialog>
+
+      <q-dialog v-model="chartEditModalOpen">
+        <RangeChartEditor
+          :page="math"
+          :chartBox="editingChartBox"
+          v-on:save="() => saveEditingChartBox()"
+        />
+      </q-dialog>
+
       <q-page-sticky position="bottom-right" :offset="[32, 32]">
         <q-fab color="primary" icon="add" direction="left">
           <q-fab-action
@@ -367,9 +428,15 @@ const removeRichTextBox = (id: number) => {
           />
           <q-fab-action
             color="secondary"
-            icon="text"
+            icon="format_quote"
             title="Add a text box"
             @click="() => makeNewRichTextBox()"
+          />
+          <q-fab-action
+            color="secondary"
+            icon="show_chart"
+            title="Add a new chart"
+            @click="() => openNewChartModal()"
           />
         </q-fab>
       </q-page-sticky>

@@ -111,3 +111,16 @@ export class ImageBox {
 }
 
 
+export class ChartBox {
+    // eslint-disable-next-line max-params
+    constructor(
+        public fnName: string,
+        public minX: number,
+        public maxX: number,
+        public stepX: number = 1,
+        public x: number = 0,
+        public y: number = 0,
+    ) {}
+}
+
+
