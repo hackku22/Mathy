@@ -88,7 +88,6 @@ Dark.set(true)
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #4484c4;
   margin-top: 60px;
 }
 .titleBar {
