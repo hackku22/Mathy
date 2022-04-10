@@ -32,8 +32,8 @@ const validateExpression = () => {
     return 'The expression is invalid'
   }
 
-  if ( stmt.defines().length > 0 ) {
-    return 'Expressions cannot declare variables'
+  if ( stmt.defines().length > 0 || stmt.isFunctionDeclaration() ) {
+    return 'Expressions cannot declare variables or functions'
   }
 }
 

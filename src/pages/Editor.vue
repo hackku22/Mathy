@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import { onMounted, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import {MathPage} from '../support/page'
-import {MathStatement} from '../support/parse'
-import {EvaluationResult, hasOwnProperty} from '../support/types'
+import { MathPage } from '../support/page'
+import { MathStatement } from '../support/parse'
+import { EvaluationResult, hasOwnProperty } from '../support/types'
 import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
-import {RichTextBox} from '../support/types'
+
+import FunctionEditor from '../components/FunctionEditor.vue'
+import { RichTextBox } from '../support/types'
 import { stepX, stepY } from '../support/const'
-import { cos } from 'mathjs'
+import { checkLoggedIn, loggedOut } from '../support/auth'
+import router from '../router'
 
 const math = new MathPage(uuidv4());
 const statements = ref<MathStatement[]>([]);
@@ -32,32 +35,47 @@ const variableListingColumns = [
   },
 ]
 
-const stmOnControlledDragStop = (stmt: MathStatement) => (e: {event: MouseEvent, data: {x: number, y: number}}) => {
+const stmOnControlledDragStop = (stmt: MathStatement) => (e: { event: MouseEvent, data: { x: number, y: number } }) => {
   console.log(e)
   console.log("moved stm5", stmt)
- const { x, y } = e.data;
+  const { x, y } = e.data;
   stmt.x = x;
   stmt.y = y;
 }
 
 
-const variableListingRows = ref<({name: string, value: string})[]>([])
+const variableListingRows = ref<({ name: string, value: string })[]>([])
+
+const functionListingColumns = [
+  {
+    name: 'value',
+    field: 'value',
+    label: 'Function',
+  },
+]
+
+const functionListingRows = ref<({ name: string, value: string })[]>([])
 
 function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
+  leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-const newVariableModalOpen = ref(false);
+const newVariableModalOpen = ref(false)
 const openNewVariableDeclModal = () => {
-  newVariableModalOpen.value = true;
+  newVariableModalOpen.value = true
 };
 
-const newExpressionModalOpen = ref(false);
+const newExpressionModalOpen = ref(false)
 const openNewExpressionModal = () => {
-  newExpressionModalOpen.value = true;
+  newExpressionModalOpen.value = true
 };
 
-const editingStatement = ref<MathStatement|undefined>()
+const newFunctionModalOpen = ref(false)
+const openNewFunctionModal = () => {
+  newFunctionModalOpen.value = true
+}
+
+const editingStatement = ref<MathStatement | undefined>()
 const editExpressionModalOpen = ref(false)
 const openEditExpressionModal = () => {
   editExpressionModalOpen.value = true
@@ -68,21 +86,27 @@ const openEditVarDeclModal = () => {
   editVarDeclModalOpen.value = true
 }
 
+const editFunctionModalOpen = ref(false)
+const openEditFunctionModal = () => {
+  editFunctionModalOpen.value = true
+}
+
 const updateStatements = () => {
   statements.value = math.getStatements();
   try {
     evaluation.value = math.evaluate()
-    const variableValues: ({name: string, value: string})[] = []
+    const variableValues: ({ name: string, value: string })[] = []
 
-    for ( const name in evaluation.value!.variables ) {
-      if ( !hasOwnProperty(evaluation.value!.variables, name) ) {
+    for (const name in evaluation.value!.variables) {
+      if (!hasOwnProperty(evaluation.value!.variables, name)) {
         continue
       }
 
       let value = String(evaluation.value!.variables[name] ?? '')
       try {
-        value = MathStatement.temp(value).toHTMLString()
-      } catch (_) {}
+        const stmt = MathStatement.temp(value)
+        value = stmt.toHTMLString()
+      } catch (_) { }
 
       variableValues.push({
         name,
@@ -91,32 +115,53 @@ const updateStatements = () => {
     }
 
     variableListingRows.value = variableValues
+
+    const functionValues: ({ name: string, value: string })[] = []
+    for (const stmt of math.functions()) {
+      const node = stmt.parse() as math.FunctionAssignmentNode
+      functionValues.push({
+        name: node.name,
+        value: stmt.toHTMLString(),
+      })
+    }
+
+    functionListingRows.value = functionValues
   } catch (_) {
-    evaluation.value = undefined;
+    console.error(_)
+    evaluation.value = undefined
   }
-  statementsKey.value = uuidv4();
+  statementsKey.value = uuidv4()
 };
 
-onMounted(updateStatements)
+onMounted(() => {
+  updateStatements()
+})
 
 const saveNewVariable = (stmt: MathStatement) => {
-  math.addStatement(stmt);
-  newVariableModalOpen.value = false;
-  updateStatements();
+  math.addStatement(stmt)
+  newVariableModalOpen.value = false
+  updateStatements()
 };
 
 const saveNewExpression = (stmt: MathStatement) => {
-  math.addStatement(stmt);
-  newExpressionModalOpen.value = false;
-  updateStatements();
+  math.addStatement(stmt)
+  newExpressionModalOpen.value = false
+  updateStatements()
 };
+
+const saveNewFunction = (stmt: MathStatement) => {
+  math.addStatement(stmt)
+  newFunctionModalOpen.value = false
+  updateStatements()
+}
 
 const editStatement = (stmt: MathStatement) => {
   editingStatement.value = stmt
-  if ( stmt.isDeclaration() ) {
+  console.log('editStatement', stmt)
+  if (stmt.isFunctionDeclaration()) {
+    openEditFunctionModal()
+  } else if (stmt.isDeclaration()) {
     openEditVarDeclModal()
-  } else if ( stmt.isFunctionDeclaration() ) {
-
   } else {
     openEditExpressionModal()
   }
@@ -129,6 +174,8 @@ const removeStatement = (stmt: MathStatement) => {
 
 const finishEditStatement = () => {
   editExpressionModalOpen.value = false
+  editVarDeclModalOpen.value = false
+  editFunctionModalOpen.value = false
   updateStatements()
 }
 
@@ -137,28 +184,25 @@ const finishEditStatement = () => {
 */
 
 const makeNewRichTextBox = () => {
-  richTextStatements.value.push(new RichTextBox(""));
+  richTextStatements.value.push(new RichTextBox(''));
   richEditID.value = richTextStatements.value.length - 1;
   richEditExpression.value = richTextStatements.value[richEditID.value].text;
   richEditModal.value = true;
-  console.log("editing statement",richEditID.value, richEditModal);
 };
 
-const richTextStatements = ref([new RichTextBox("Hello World")]);
+const richTextStatements = ref<RichTextBox[]>([]);
 
 const richEditModal = ref(false);
 const richEditExpression = ref("");
 const richEditID = ref(0);
 
 const richEditStatement = (id: number) => {
-  console.log("editing Text", id, richEditModal);
   richEditModal.value = true;
   richEditID.value = id;
   richEditExpression.value = richTextStatements.value[richEditID.value].text;
 };
 
-const moveRichTextBox = (id: number,x:number,y:number) => {
-  console.log("Moving Text", id, x,y);
+const moveRichTextBox = (id: number, x: number, y: number) => {
   richEditID.value = id;
   richTextStatements.value[richEditID.value].x = x;
   richTextStatements.value[richEditID.value].y = y;
@@ -173,6 +217,31 @@ const removeRichTextBox = (id: number) => {
   console.log(richTextStatements.value[id]);
   richTextStatements.value.splice(id, 1);
 };
+
+/*
+  Auth
+*/
+const status = ref(checkLoggedIn())
+const logout = async () => {
+  const response = await fetch('/api/logout/', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+    },
+  })
+  loggedOut()
+  status.value = checkLoggedIn()
+  router.push('/')
+}
+
+onMounted(() => {
+  status.value = checkLoggedIn()
+  console.log(status.value)
+  if (status.value == false) {
+    router.push({ path: '/' })
+  }
+})
+
 </script>
 
 <template>
@@ -184,13 +253,13 @@ const removeRichTextBox = (id: number) => {
         <q-toolbar-title>
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar>
-          Title
+          </q-avatar>Title
         </q-toolbar-title>
       </q-toolbar>
-      <q-tabs align="left">
+      <q-tabs>
         <q-route-tab to="/Scratch" label="Scratch" />
         <q-route-tab to="/Editor" label="Editor" />
+        <q-tab v-if="status" @click="logout()" label="Logout" />
       </q-tabs>
     </q-header>
 
@@ -205,14 +274,12 @@ const removeRichTextBox = (id: number) => {
             row-key="name"
             hide-no-data
             hide-bottom
-            :pagination="{rowsPerPage: 10000}"
+            :pagination="{ rowsPerPage: 10000 }"
             style="height: 100%; border-radius: 0"
           >
             <template v-slot:body="props">
               <q-tr :props="props">
-                <q-td key="name" :props="props">
-                  {{ props.row.name }}
-                </q-td>
+                <q-td key="name" :props="props">{{ props.row.name }}</q-td>
                 <q-td key="value" :props="props">
                   <div v-html="props.row.value"></div>
                 </q-td>
@@ -221,21 +288,21 @@ const removeRichTextBox = (id: number) => {
           </q-table>
         </div>
         <div class="col">
-<!--          <q-separator />-->
+          <!--          <q-separator />-->
           <q-table
             flat
             title="Functions"
+            :rows="functionListingRows"
+            :columns="functionListingColumns"
             row-key="name"
             hide-no-data
             hide-bottom
-            :pagination="{rowsPerPage: 10000}"
+            hide-header
+            :pagination="{ rowsPerPage: 10000 }"
             style="height: 100%; border-top: 1px solid lightgrey; border-radius: 0"
           >
             <template v-slot:body="props">
               <q-tr :props="props">
-                <q-td key="name" :props="props">
-                  {{ props.row.name }}
-                </q-td>
                 <q-td key="value" :props="props">
                   <div v-html="props.row.value"></div>
                 </q-td>
@@ -256,7 +323,7 @@ const removeRichTextBox = (id: number) => {
           :grid="[stepX, stepY]"
           :position="{ x: statement.x, y: statement.y }"
           :default-position="{ x: statement.x, y: statement.y }"
-          @stop="(e: {event: MouseEvent, data: {x: number, y: number}}) => stmOnControlledDragStop(statement)(e)"
+          @stop="(e: { event: MouseEvent, data: { x: number, y: number } }) => stmOnControlledDragStop(statement)(e)"
         >
           <div>
             <Statement
@@ -279,17 +346,19 @@ const removeRichTextBox = (id: number) => {
       </q-dialog>
 
       <q-dialog v-model="editExpressionModalOpen">
-        <ExpressionEditor
-          :statement="editingStatement"
-          v-on:save="() => finishEditStatement()"
-        />
+        <ExpressionEditor :statement="editingStatement" v-on:save="() => finishEditStatement()" />
       </q-dialog>
 
       <q-dialog v-model="editVarDeclModalOpen">
-        <VarDeclEditor
-          :statement="editingStatement"
-          v-on:save="() => finishEditStatement()"
-        />
+        <VarDeclEditor :statement="editingStatement" v-on:save="() => finishEditStatement()" />
+      </q-dialog>
+
+      <q-dialog v-model="newFunctionModalOpen">
+        <FunctionEditor v-on:save="(s) => saveNewFunction(s)" />
+      </q-dialog>
+
+      <q-dialog v-model="editFunctionModalOpen">
+        <FunctionEditor :statement="editingStatement" v-on:save="() => finishEditStatement()" />
       </q-dialog>
 
       <q-page-sticky position="bottom-right" :offset="[32, 32]">
@@ -309,8 +378,14 @@ const removeRichTextBox = (id: number) => {
           />
           <q-fab-action
             color="secondary"
+            icon="functions"
+            title="Add a new function"
+            @click="() => openNewFunctionModal()"
+          />
+          <q-fab-action
+            color="secondary"
             icon="text"
-            title="Add a Text Box"
+            title="Add a text box"
             @click="() => makeNewRichTextBox()"
           />
         </q-fab>
@@ -321,12 +396,7 @@ const removeRichTextBox = (id: number) => {
           <q-editor v-model="richEditExpression" min-height="5rem" />
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancel" v-close-popup></q-btn>
-            <q-btn
-              flat
-              label="Save"
-              @click="richUpdateValue"
-              v-close-popup
-            ></q-btn>
+            <q-btn flat label="Save" @click="richUpdateValue" v-close-popup></q-btn>
           </q-card-actions>
         </q-card>
       </q-dialog>

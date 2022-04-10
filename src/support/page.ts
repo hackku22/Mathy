@@ -2,7 +2,7 @@ import {MathStatement} from './parse'
 import * as math from 'mathjs'
 import {DepGraph} from 'dependency-graph'
 import { v4 as uuidv4 } from 'uuid'
-import {EvaluationResult, Maybe, StatementID, VariableName} from './types'
+import {EvaluationResult, hasOwnProperty, Maybe, StatementID, VariableName} from './types'
 
 /**
  * Wrapper for a page containing multiple interrelated mathematical statements.
@@ -82,6 +82,12 @@ export class MathPage {
     dependencies(): DepGraph<MathStatement> {
         const graph = new DepGraph<MathStatement>()
         const defined: Record<VariableName, MathStatement> = this.definers()
+        const definedFunctions: Record<VariableName, MathStatement> = {}
+
+        for ( const sym of this.functions() ) {
+            const node = sym.parse() as math.FunctionAssignmentNode
+            definedFunctions[node.name as VariableName] = sym
+        }
 
         for ( const statement of Object.values(this.statements) ) {
             graph.addNode(statement.id, statement)
@@ -89,6 +95,12 @@ export class MathPage {
 
         for ( const statement of Object.values(this.statements) ) {
             for ( const symbol of statement.uses() ) {
+                const functionProvider = definedFunctions[symbol.name as VariableName]
+                if ( functionProvider ) {
+                    graph.addDependency(statement.id, functionProvider.id)
+                    continue
+                }
+
                 const provider = defined[symbol.name as VariableName]
                 if ( !provider ) {
                     throw new Error('No provider for undefined symbol: ' + symbol.name)
@@ -101,11 +113,32 @@ export class MathPage {
         return graph
     }
 
+    /** Returns true if the given variable name is a function definition. */
+    isFunctionKey(name: VariableName): boolean {
+        return this.functions()
+            .some(stmt => {
+                const node = stmt.parse() as math.FunctionAssignmentNode
+                return node.name === name
+            })
+    }
+
+    /** Get all the statements defining functions. */
+    functions(): MathStatement[] {
+        return Object.values(this.statements)
+            .filter(x => x.isFunctionDeclaration())
+    }
+
     /** Evaluate the current state of the page and get the result. */
     evaluate(): EvaluationResult {
         const evaluations: Record<StatementID, any> = {}
         const scope: Record<VariableName, any> = {}
         const graph = this.dependencies()
+        const definers = this.definers()
+
+        for ( const stmt of this.functions() ) {
+            const node = stmt.parse() as math.FunctionAssignmentNode
+            scope[node.name as VariableName] = stmt.parse().evaluate()
+        }
 
         for ( const node of graph.overallOrder() ) {
             const stmt = this.statements[node as StatementID]
@@ -114,8 +147,19 @@ export class MathPage {
                 .evaluate(scope)
         }
 
+        const nonFunctionalScope: Record<VariableName, any> = {}
+        for ( const key in scope ) {
+            if ( !hasOwnProperty(scope, key) ) {
+                continue
+            }
+
+            if ( definers[key as VariableName] ) {
+                nonFunctionalScope[key as VariableName] = scope[key]
+            }
+        }
+
         return {
-            variables: scope,
+            variables: nonFunctionalScope,
             statements: evaluations,
         }
     }

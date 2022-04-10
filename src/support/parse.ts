@@ -117,6 +117,7 @@ export class SymbolWalk extends MathNodeWalk<math.SymbolNode[]> {
 
     walkFunctionAssignmentNode(node: math.FunctionAssignmentNode): math.SymbolNode[] {
         return this.walk(node.expr)
+            .filter(sym => !node.params.includes(sym.name))
     }
 
     walkFunctionNode(node: math.FunctionNode): math.SymbolNode[] {
@@ -350,6 +351,6 @@ export class MathStatement {
     }
 
     isFunctionDeclaration(): boolean {
-        return false
+        return math.isFunctionAssignmentNode(this.parse())
     }
 }
