@@ -32,8 +32,10 @@ const variableListingColumns = [
   },
 ]
 
-const stmOnControlledDragStop = (stmt: MathStatement) => (e: MouseEvent) => {
-  const { x, y } = e;
+const stmOnControlledDragStop = (stmt: MathStatement) => (e: {event: MouseEvent, data: {x: number, y: number}}) => {
+  console.log(e)
+  console.log("moved stm5", stmt)
+ const { x, y } = e.data;
   stmt.x = x;
   stmt.y = y;
 }
@@ -253,7 +255,8 @@ const removeRichTextBox = (id: number) => {
         <Draggable
           :grid="[stepX, stepY]"
           :position="{ x: statement.x, y: statement.y }"
-          @stop="stmOnControlledDragStop(statement)"
+          :default-position="{ x: statement.x, y: statement.y }"
+          @stop="(e: {event: MouseEvent, data: {x: number, y: number}}) => stmOnControlledDragStop(statement)(e)"
         >
           <div>
             <Statement

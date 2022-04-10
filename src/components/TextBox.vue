@@ -6,19 +6,28 @@ const props = defineProps<{value: RichTextBox}>();
 
 const emit = defineEmits<{
   (eventName: 'move', x: number,y:number): void,
+  (eventName: 'edit',): void,
+  (eventName: 'remove',): void,
+
 }>()
 
 
-function onControlledDrag(e) {
+function onControlledDrag(e: {event: MouseEvent, data: {x: number, y: number}}) {
+  
+  // const x = e.x;
+  // const y = e.y;
    const { x, y } = e.data;
    props.value.x = x;
    props.value.y = y;
    console.log(e)
 }
-function onControlledDragStop(e) {
+function onControlledDragStop(e: {event: MouseEvent, data: {x: number, y: number}}) {
+  // console.log(typeof(e))
     const { x, y } = e.data;
+      // const x = e.x;
+    // const y = e.y;
     console.log(self)
-    emit('move', [x, y]);
+    emit('move', x, y);
   onControlledDrag(e);
 }
 
@@ -41,7 +50,9 @@ function onControlledDragStop(e) {
                 <q-menu cover auto-close>
                   <q-list>
                     <q-item clickable>
-                      <q-item-section @click="() => $emit('edit')"
+                      <q-item-section @click="() => $emit('edit')">
+                        <q-icon name="edit" />
+                        <q-item-label>Edit</q-item-label>
                       >Edit</q-item-section
                       >
                     </q-item>
