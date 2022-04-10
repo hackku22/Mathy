@@ -271,7 +271,7 @@ const removeRichTextBox = (id: number) => {
 const makeNewImageBox = () => {
   images.value.push(new ImageContainer(''));
   imageID.value = images.value.length - 1;
-  imageURL.value = images.value[richEditID.value].url;
+  imageURL.value = images.value[imageID.value].url;
   imageModal.value = true;
 };
 
