@@ -3,19 +3,25 @@ import { onMounted, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { MathPage } from '../support/page'
 import { MathStatement } from '../support/parse'
-import { EvaluationResult, hasOwnProperty } from '../support/types'
+import { ChartBox, EvaluationResult, hasOwnProperty } from '../support/types'
 import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
+<<<<<<< HEAD
 import ImageBox from '../components/ImageBox.vue'
 
 import FunctionEditor from '../components/FunctionEditor.vue'
 import { RichTextBox, ImageContainer } from '../support/types'
+=======
+import FunctionEditor from '../components/FunctionEditor.vue'
+import RangeChart from '../components/RangeChart.vue'
+import RangeChartEditor from './RangeChartEditor.vue'
+import { RichTextBox } from '../support/types'
+>>>>>>> 17a6aea76db7a943a190d4db6524e6b16c01392e
 import { stepX, stepY } from '../support/const'
 import { checkLoggedIn, loggedOut } from '../support/auth'
 import router from '../router'
-
 
 const math = new MathPage(uuidv4());
 const statements = ref<MathStatement[]>([]);
@@ -39,7 +45,7 @@ const variableListingColumns = [
     label: 'Value',
   },
 ]
-  
+
 
 const stmOnControlledDragStop = (stmt: MathStatement) => (e: { event: MouseEvent, data: { x: number, y: number } }) => {
   console.log(e)
@@ -196,8 +202,42 @@ const makeNewRichTextBox = () => {
   richEditModal.value = true;
 };
 
-const richTextStatements = ref<RichTextBox[]>([]);
+const chartBoxKey = ref(uuidv4())
+const chartBoxes = ref<ChartBox[]>([])
 
+const newChartModalOpen = ref(false)
+const openNewChartModal = () => {
+  newChartModalOpen.value = true
+}
+
+const saveNewChartBox = (chartBox: ChartBox) => {
+  chartBoxes.value.push(chartBox)
+  newChartModalOpen.value = false
+}
+
+const editingChartBox = ref<ChartBox | undefined>()
+const chartEditModalOpen = ref(false)
+const openChartEditModal = (box: ChartBox) => {
+  editingChartBox.value = box
+  chartEditModalOpen.value = true
+}
+
+const saveEditingChartBox = () => {
+  chartEditModalOpen.value = false
+  chartBoxKey.value = uuidv4()
+}
+
+const moveChartBox = (id: number, x: number, y: number) => {
+  chartBoxes.value[id].x = x
+  chartBoxes.value[id].y = y
+}
+const removeChartBox = (id: number) => {
+  chartBoxes.value.splice(id, 1);
+};
+
+const richTextStatements = ref<RichTextBox[]>([
+  new RichTextBox("Hello World"),
+]);
 const richEditModal = ref(false);
 const richEditExpression = ref("");
 const richEditID = ref(0);
@@ -297,16 +337,14 @@ onMounted(() => {
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar>Title
+          <q-avatar size="50px">
+            <img src="../assets/l2.svg" />
+          </q-avatar>
+          <span style="font-family: 'Cinzel Decorative', cursive;">Crystal Math Worktable</span>
         </q-toolbar-title>
+
+        <span v-if="status" @click="logout()" label="Logout">Logout</span>
       </q-toolbar>
-      <q-tabs>
-        <q-route-tab to="/Scratch" label="Scratch" />
-        <q-route-tab to="/Editor" label="Editor" />
-        <q-tab v-if="status" @click="logout()" label="Logout" />
-      </q-tabs>
     </q-header>
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
@@ -361,8 +399,19 @@ onMounted(() => {
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container id="editor">
+    <q-page-container id="editor" style="padding=0">
       <!--      <WrapperBox />-->
+
+      <span v-for="(chartBox, index) in chartBoxes" style="display: flex">
+        <RangeChart
+          :fn="math.getFunctionByNameOrFail(chartBox.fnName)"
+          :key="chartBoxKey"
+          :value="chartBox"
+          v-on:move="(x, y) => moveChartBox(index, x, y)"
+          v-on:remove="() => removeChartBox(index)"
+          v-on:edit="() => openChartEditModal(chartBox)"
+        />
+      </span>
 
       <span v-for="statement in statements" style="display: flex">
         <Draggable
@@ -407,6 +456,18 @@ onMounted(() => {
         <FunctionEditor :statement="editingStatement" v-on:save="() => finishEditStatement()" />
       </q-dialog>
 
+      <q-dialog v-model="newChartModalOpen">
+        <RangeChartEditor :page="math" v-on:save="c => saveNewChartBox(c)" />
+      </q-dialog>
+
+      <q-dialog v-model="chartEditModalOpen">
+        <RangeChartEditor
+          :page="math"
+          :chartBox="editingChartBox"
+          v-on:save="() => saveEditingChartBox()"
+        />
+      </q-dialog>
+
       <q-page-sticky position="bottom-right" :offset="[32, 32]">
         <q-fab color="primary" icon="add" direction="left">
           <q-fab-action
@@ -430,7 +491,7 @@ onMounted(() => {
           />
           <q-fab-action
             color="secondary"
-            icon="text"
+            icon="format_quote"
             title="Add a text box"
             @click="() => makeNewRichTextBox()"
           />
@@ -439,6 +500,12 @@ onMounted(() => {
             icon="image"
             title="Add an image box"
             @click="() => makeNewImageBox()"
+          />
+          <q-fab-action
+            color="secondary"
+            icon="show_chart"
+            title="Add a new chart"
+            @click="() => openNewChartModal()"
           />
         </q-fab>
       </q-page-sticky>
@@ -464,7 +531,7 @@ onMounted(() => {
 
       <q-dialog v-model="imageModal">
         <q-card autogrow style="min-width: 25em;">
-          <q-input autogrow v-model="imageURL"/>
+          <q-input autogrow v-model="imageURL" />
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancel" v-close-popup></q-btn>
             <q-btn flat label="Save" @click="imageUpdateValue" v-close-popup></q-btn>
@@ -481,21 +548,16 @@ onMounted(() => {
         />
       </div>
     </q-page-container>
-
-    <q-footer reveal elevated class="bg-grey-8 text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          <div>Status</div>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
   </q-layout>
 </template>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
+
 #editor {
   background-image: url(../assets/grid.svg);
   background-repeat: repeat;
   height: 100%;
+  padding-top: 0px;
 }
 </style>

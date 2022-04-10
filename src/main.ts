@@ -50,7 +50,7 @@ app.use(Quasar, {
     config: {
         brand: {
             primary: '#553564',
-            secondary: '#c1eeff',
+            secondary: '#7da9b2',
             accent: '#9C27B0',
 
             dark: '#1d1d1d',

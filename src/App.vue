@@ -54,7 +54,7 @@ Dark.set(true)
 
 <template>
   <q-layout view="hHr LpR fFf">
-    <q-header elevated class="bg-primary text-white" height-hint="98">
+    <q-header elevated class="bg-primary text-white" >
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar size="50px">
@@ -63,8 +63,7 @@ Dark.set(true)
           <span style="font-family: 'Cinzel Decorative', cursive;">
             Crystal Math Worktable
           </span>
-          <q-tab v-if="status" @click="logout()" label="Logout" />
-
+          <q-icon icon="fa-solid fa-arrow-up-left-from-circle" v-if="status" @click="logout()" label="Logout" />
         </q-toolbar-title>
       </q-toolbar>
 
@@ -75,7 +74,7 @@ Dark.set(true)
         </q-tabs> -->
     </q-header>
 
-    <q-page-container style="display: flex;padding-top: 20px;">
+    <q-page-container style="display: flex;padding-top: 0px;">
       <router-view />
     </q-page-container>
   </q-layout>

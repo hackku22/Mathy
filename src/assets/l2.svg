@@ -19,20 +19,20 @@
      bordercolor="#000000"
      borderopacity="0.25"
      inkscape:pageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.51843089"
-     inkscape:cx="-180.35191"
-     inkscape:cy="555.52245"
+     inkscape:zoom="0.733172"
+     inkscape:cx="497.15483"
+     inkscape:cy="634.23044"
      inkscape:window-width="1920"
      inkscape:window-height="1001"
      inkscape:window-x="-7"
      inkscape:window-y="-7"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer2">
+     inkscape:current-layer="g5278">
     <inkscape:grid
        type="xygrid"
        id="grid59924" />
@@ -49,30 +49,29 @@
        inkscape:label="Text"
        transform="matrix(0.26458333,0,0,0.26458333,10.166581,13.777983)"
        style="fill:#550000">
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke:#ffffff;stroke-width:0;stroke-miterlimit:4.8;stroke-dasharray:none;stroke-opacity:1"
-         x="-37.659836"
-         y="831.96069"
-         id="text6305"
-         transform="scale(0.96764101,1.0334411)"><tspan
-           sodipodi:role="line"
-           id="tspan6303"
-           x="-37.659836"
-           y="831.96069"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke-width:0;stroke:#ffffff;stroke-opacity:1;stroke-dasharray:none">C</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:463.256px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke:#ffffff;stroke-width:0;stroke-miterlimit:4.8;stroke-dasharray:none;stroke-opacity:1"
-         x="120.35316"
-         y="634.82605"
-         id="text6413"
-         transform="scale(0.97653789,1.0240258)"><tspan
-           sodipodi:role="line"
-           id="tspan6411"
-           x="120.35316"
-           y="634.82605"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke-width:0;stroke:#ffffff;stroke-opacity:1;stroke-dasharray:none">M</tspan></text>
+      <g
+         id="g5278">
+        <g
+           aria-label="C"
+           transform="scale(0.96764101,1.0334411)"
+           id="text6305"
+           style="font-weight:bold;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke:#ffffff;stroke-width:0;stroke-miterlimit:4.8">
+          <path
+             d="m 734.8651,491.73955 q 0,166.71805 -90.14406,260.73928 -89.17477,93.05194 -252.98496,93.05194 -110.49917,0 -199.67395,-46.52597 Q 103.85665,752.47883 54.422811,672.02768 5.9582599,591.57652 5.9582599,492.70884 q 0,-99.83698 48.4645511,-180.28813 48.464549,-80.45116 133.762159,-126.00783 85.29761,-46.52597 189.98104,-46.52597 65.91179,0 133.76216,18.41653 68.81966,17.44724 114.37634,47.49526 l 19.38582,136.67003 h -8.72362 Q 616.6116,261.04829 542.94548,215.49161 469.27937,168.96564 379.1353,168.96564 q -128.9157,0 -215.1826,92.08265 -85.297614,91.11335 -85.297614,229.72197 0,138.60861 88.205484,232.62984 89.17477,93.05194 232.62984,93.05194 143.45507,0 233.59914,-93.05194 91.11335,-93.05194 91.11335,-254.92354 h 9.69291 q 0.96929,11.63149 0.96929,23.26299 z"
+             style="font-weight:normal;-inkscape-font-specification:'Cinzel Decorative'"
+             id="path5280" />
+        </g>
+        <g
+           aria-label="M"
+           transform="scale(0.97653789,1.0240258)"
+           id="text6413"
+           style="font-size:463.256px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke:#ffffff;stroke-width:0;stroke-miterlimit:4.8">
+          <path
+             d="m 75.88058,279.97194 q 26.40559,-11.11814 45.86235,-11.11814 19.45675,0 34.28094,3.70605 14.82419,3.70605 30.11164,12.50791 15.75071,8.33861 29.18513,20.84652 25.94234,24.55257 44.00932,55.59072 l 92.6512,173.72101 134.34425,-231.16475 h 4.1693 l 48.17863,272.39453 q 11.11814,63.00282 38.45024,100.0633 27.33211,37.52374 75.04748,37.52374 3.24279,0 6.02233,0 v 4.63256 q -25.47908,6.94884 -50.03165,6.94884 -50.03165,0 -91.26144,-39.37676 -39.84001,-37.52374 -54.20095,-109.79168 l -22.69954,-134.8075 -87.09213,151.02146 q -17.60373,29.18513 -18.06699,51.42142 h -4.1693 L 215.32064,425.43433 192.62109,610.73674 q -1.38976,10.65489 9.26513,17.14047 4.1693,2.77954 8.80186,2.77954 h 7.4121 v 4.1693 h -96.82051 v -4.63256 h 7.4121 q 12.04465,0 21.30977,-6.94884 9.72838,-7.4121 12.04466,-19.92001 l 31.50141,-220.97312 q -20.84652,-37.06048 -47.71537,-65.78235 -30.11164,-32.42792 -63.00282,-32.42792 -3.242792,0 -6.022328,0.46325 z"
+             style="font-weight:bold;-inkscape-font-specification:'Cinzel Decorative Bold'"
+             id="path5283" />
+        </g>
+      </g>
     </g>
   </g>
 </svg>
