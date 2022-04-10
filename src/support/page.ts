@@ -11,10 +11,27 @@ export class MathPage {
     /** The statements on the page. */
     protected statements: Record<StatementID, MathStatement> = {}
 
+    static deserialize(vals: [string, [StatementID, string, number, number][]]) {
+        const inst = new this(vals[0])
+
+        for ( const row of vals[1] ) {
+            inst.statements[row[0]] = MathStatement.deserialize(row)
+        }
+
+        return inst
+    }
+
     constructor(
         /** Unique page ID. */
         public readonly id: string,
     ) {}
+
+    serialize(): [string, [StatementID, string, number, number][]] {
+        return [
+            this.id,
+            Object.values(this.statements).map(x => x.serialize()),
+        ]
+    }
 
     /** Get all defined statements. */
     getStatements(): MathStatement[] {
