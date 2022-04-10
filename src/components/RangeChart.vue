@@ -86,6 +86,7 @@ const getChartData = (): ChartData<'line'> => {
     datasets: [{
       label: node.name,
       backgroundColor: '#553564',
+      borderColor: '#ccc',
       data: range.map(x => fn(x)),
       pointRadius: 5
     }],
