@@ -14,7 +14,7 @@ const props = defineProps({
     :grid="[stepX, stepY]"
     :default-position="{ x: props.value.x, y: props.value.y }"
   >
-    <div style="display: flex; bottom: 10px; right: 0">
+    <div style="display: flex;">
       <q-card flat bordered>
         <q-card-section style="padding: 0">
           <div class="row items-center no-wrap">
