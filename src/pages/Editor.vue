@@ -32,6 +32,15 @@ const variableListingColumns = [
   },
 ]
 
+const stmOnControlledDragStop = (stmt: MathStatement) => (e: {event: MouseEvent, data: {x: number, y: number}}) => {
+  console.log(e)
+  console.log("moved stm5", stmt)
+ const { x, y } = e.data;
+  stmt.x = x;
+  stmt.y = y;
+}
+
+
 const variableListingRows = ref<({name: string, value: string})[]>([])
 
 const functionListingColumns = [
@@ -170,30 +179,37 @@ const finishEditStatement = () => {
 */
 
 const makeNewRichTextBox = () => {
-  richTextStatements.value.push(new RichTextBox(""));
+  richTextStatements.value.push(new RichTextBox(''));
   richEditID.value = richTextStatements.value.length - 1;
   richEditExpression.value = richTextStatements.value[richEditID.value].text;
   richEditModal.value = true;
-  console.log("editing statement",richEditID.value, richEditModal);
 };
 
-const richTextStatements = ref([]);
+const richTextStatements = ref<RichTextBox[]>([]);
 
 const richEditModal = ref(false);
 const richEditExpression = ref("");
 const richEditID = ref(0);
 
 const richEditStatement = (id: number) => {
-  console.log("editing statement", id, richEditModal);
   richEditModal.value = true;
   richEditID.value = id;
   richEditExpression.value = richTextStatements.value[richEditID.value].text;
 };
 
+const moveRichTextBox = (id: number,x:number,y:number) => {
+  richEditID.value = id;
+  richTextStatements.value[richEditID.value].x = x;
+  richTextStatements.value[richEditID.value].y = y;
+};
+
+
+
 function richUpdateValue() {
   richTextStatements.value[richEditID.value].text = richEditExpression.value;
 }
 const removeRichTextBox = (id: number) => {
+  console.log(richTextStatements.value[id]);
   richTextStatements.value.splice(id, 1);
 };
 </script>
@@ -277,6 +293,9 @@ const removeRichTextBox = (id: number) => {
       <span v-for="statement in statements" style="display: flex">
         <Draggable
           :grid="[stepX, stepY]"
+          :position="{ x: statement.x, y: statement.y }"
+          :default-position="{ x: statement.x, y: statement.y }"
+          @stop="(e: {event: MouseEvent, data: {x: number, y: number}}) => stmOnControlledDragStop(statement)(e)"
         >
           <div>
             <Statement
@@ -375,6 +394,7 @@ const removeRichTextBox = (id: number) => {
           :value="item"
           v-on:edit="() => (item.text ? richEditStatement(index) : {})"
           v-on:remove="() => removeRichTextBox(index)"
+          v-on:move="(x, y) => moveRichTextBox(index, x, y)"
         />
       </div>
     </q-page-container>
