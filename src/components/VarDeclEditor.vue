@@ -3,7 +3,7 @@ import * as math from 'mathjs'
 import {onMounted, ref} from 'vue'
 import {MathStatement} from '../support/parse'
 import {v4 as uuidv4} from 'uuid'
-import Katex from '../components/Katex.vue'
+import Katex from './Katex.vue'
 import {StatementID} from '../support/types'
 
 const props = defineProps<{
