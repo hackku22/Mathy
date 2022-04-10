@@ -12,6 +12,7 @@ specifiers:
   '@vitejs/plugin-vue': ^2.3.1
   '@volar/vue-language-service': ^0.33.9
   '@vuetify/vite-plugin': 1.0.0-alpha.10
+  chart.js: ^3.7.1
   dependency-graph: ^0.11.0
   eslint: ^8.13.0
   install: ^0.13.0
@@ -23,6 +24,7 @@ specifiers:
   uuid: ^8.3.2
   vite: ^2.9.0
   vue: ^3.2.25
+  vue-chart-3: ^3.1.8
   vue-router: ^4.0.14
   vue-tsc: ^0.33.9
   vuetify: 3.0.0-beta.0
@@ -33,6 +35,7 @@ dependencies:
   '@types/katex': 0.14.0
   '@types/uuid': 8.3.4
   '@vuetify/vite-plugin': 1.0.0-alpha.10_vite@2.9.1+vuetify@3.0.0-beta.0
+  chart.js: 3.7.1
   dependency-graph: 0.11.0
   install: 0.13.0
   katex: 0.15.3
@@ -40,6 +43,7 @@ dependencies:
   quasar: 2.6.6
   uuid: 8.3.2
   vue: 3.2.31
+  vue-chart-3: 3.1.8_chart.js@3.7.1+vue@3.2.31
   vue-router: 4.0.14_vue@3.2.31
   vuetify: 3.0.0-beta.0_vue@3.2.31
 
@@ -1069,6 +1073,10 @@ packages:
       is-regex: 1.1.4
     dev: true
 
+  /chart.js/3.7.1:
+    resolution: {integrity: sha512-8knRegQLFnPQAheZV8MjxIXc5gQEfDFD897BJgv/klO/vtIyFFmgMXrNfgrXpbTr/XbTturxRgxIXx/Y+ASJBA==}
+    dev: false
+
   /chokidar/3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
     engines: {node: '>= 8.10.0'}
@@ -1212,6 +1220,10 @@ packages:
 
   /csstype/2.6.20:
     resolution: {integrity: sha512-/WwNkdXfckNgw6S5R125rrW8ez139lBHWouiBvX8dfMFtcn6V81REDqnH7+CRpRipfYlyU1CmOnOxrmGcFOjeA==}
+    dev: false
+
+  /csstype/3.0.11:
+    resolution: {integrity: sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw==}
     dev: false
 
   /currently-unhandled/0.4.1:
@@ -2446,6 +2458,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       p-locate: 4.1.0
+
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
 
   /lodash.iteratee/4.7.0:
     resolution: {integrity: sha1-vkF32yiajMw8CZDx2ya1si/BVUw=}
@@ -3906,6 +3922,20 @@ packages:
   /vscode-uri/3.0.3:
     resolution: {integrity: sha512-EcswR2S8bpR7fD0YPeS7r2xXExrScVMxg4MedACaWHEtx9ftCF/qHG1xGkolzTPcEmjTavCQgbVzHUIdTMzFGA==}
     dev: true
+
+  /vue-chart-3/3.1.8_chart.js@3.7.1+vue@3.2.31:
+    resolution: {integrity: sha512-zX5ajjQi/PocEqLETlej3vp92q/tnI/Fvu2RVb++Kap8qOrXu6PXCpodi73BFrWzEGZIAnqoUxC3OIkRWD657g==}
+    peerDependencies:
+      chart.js: '=> ^3.1.0'
+      vue: '>= 3'
+    dependencies:
+      '@vue/runtime-core': 3.2.31
+      '@vue/runtime-dom': 3.2.31
+      chart.js: 3.7.1
+      csstype: 3.0.11
+      lodash-es: 4.17.21
+      vue: 3.2.31
+    dev: false
 
   /vue-demi/0.12.5_vue@3.2.31:
     resolution: {integrity: sha512-BREuTgTYlUr0zw0EZn3hnhC3I6gPWv+Kwh4MCih6QcAeaTlaIX0DwOVN0wHej7hSvDPecz4jygy/idsgKfW58Q==}

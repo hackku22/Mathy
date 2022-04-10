@@ -10,6 +10,7 @@ import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
 import {RichTextBox} from '../support/types'
 import { stepX, stepY } from '../support/const'
+import FunctionEditor from '../components/FunctionEditor.vue'
 
 const math = new MathPage(uuidv4());
 const statements = ref<MathStatement[]>([]);
@@ -33,19 +34,34 @@ const variableListingColumns = [
 
 const variableListingRows = ref<({name: string, value: string})[]>([])
 
+const functionListingColumns = [
+  {
+    name: 'value',
+    field: 'value',
+    label: 'Function',
+  },
+]
+
+const functionListingRows = ref<({name: string, value: string})[]>([])
+
 function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
+  leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-const newVariableModalOpen = ref(false);
+const newVariableModalOpen = ref(false)
 const openNewVariableDeclModal = () => {
-  newVariableModalOpen.value = true;
+  newVariableModalOpen.value = true
 };
 
-const newExpressionModalOpen = ref(false);
+const newExpressionModalOpen = ref(false)
 const openNewExpressionModal = () => {
-  newExpressionModalOpen.value = true;
+  newExpressionModalOpen.value = true
 };
+
+const newFunctionModalOpen = ref(false)
+const openNewFunctionModal = () => {
+  newFunctionModalOpen.value = true
+}
 
 const editingStatement = ref<MathStatement|undefined>()
 const editExpressionModalOpen = ref(false)
@@ -56,6 +72,11 @@ const openEditExpressionModal = () => {
 const editVarDeclModalOpen = ref(false)
 const openEditVarDeclModal = () => {
   editVarDeclModalOpen.value = true
+}
+
+const editFunctionModalOpen = ref(false)
+const openEditFunctionModal = () => {
+  editFunctionModalOpen.value = true
 }
 
 const updateStatements = () => {
@@ -71,7 +92,8 @@ const updateStatements = () => {
 
       let value = String(evaluation.value!.variables[name] ?? '')
       try {
-        value = MathStatement.temp(value).toHTMLString()
+        const stmt = MathStatement.temp(value)
+        value = stmt.toHTMLString()
       } catch (_) {}
 
       variableValues.push({
@@ -81,32 +103,51 @@ const updateStatements = () => {
     }
 
     variableListingRows.value = variableValues
+
+    const functionValues: ({name: string, value: string})[] = []
+    for ( const stmt of math.functions() ) {
+      const node = stmt.parse() as math.FunctionAssignmentNode
+      functionValues.push({
+        name: node.name,
+        value: stmt.toHTMLString(),
+      })
+    }
+
+    functionListingRows.value = functionValues
   } catch (_) {
-    evaluation.value = undefined;
+    console.error(_)
+    evaluation.value = undefined
   }
-  statementsKey.value = uuidv4();
+  statementsKey.value = uuidv4()
 };
 
 onMounted(updateStatements)
 
 const saveNewVariable = (stmt: MathStatement) => {
-  math.addStatement(stmt);
-  newVariableModalOpen.value = false;
-  updateStatements();
+  math.addStatement(stmt)
+  newVariableModalOpen.value = false
+  updateStatements()
 };
 
 const saveNewExpression = (stmt: MathStatement) => {
-  math.addStatement(stmt);
-  newExpressionModalOpen.value = false;
-  updateStatements();
+  math.addStatement(stmt)
+  newExpressionModalOpen.value = false
+  updateStatements()
 };
+
+const saveNewFunction = (stmt: MathStatement) => {
+  math.addStatement(stmt)
+  newFunctionModalOpen.value = false
+  updateStatements()
+}
 
 const editStatement = (stmt: MathStatement) => {
   editingStatement.value = stmt
-  if ( stmt.isDeclaration() ) {
+  console.log('editStatement', stmt)
+  if ( stmt.isFunctionDeclaration() ) {
+    openEditFunctionModal()
+  } else if ( stmt.isDeclaration() ) {
     openEditVarDeclModal()
-  } else if ( stmt.isFunctionDeclaration() ) {
-
   } else {
     openEditExpressionModal()
   }
@@ -119,6 +160,8 @@ const removeStatement = (stmt: MathStatement) => {
 
 const finishEditStatement = () => {
   editExpressionModalOpen.value = false
+  editVarDeclModalOpen.value = false
+  editFunctionModalOpen.value = false
   updateStatements()
 }
 
@@ -134,7 +177,7 @@ const makeNewRichTextBox = () => {
   console.log("editing statement",richEditID.value, richEditModal);
 };
 
-const richTextStatements = ref([new RichTextBox("Hello World")]);
+const richTextStatements = ref([]);
 
 const richEditModal = ref(false);
 const richEditExpression = ref("");
@@ -205,17 +248,17 @@ const removeRichTextBox = (id: number) => {
           <q-table
             flat
             title="Functions"
+            :rows="functionListingRows"
+            :columns="functionListingColumns"
             row-key="name"
             hide-no-data
             hide-bottom
+            hide-header
             :pagination="{rowsPerPage: 10000}"
             style="height: 100%; border-top: 1px solid lightgrey; border-radius: 0"
           >
             <template v-slot:body="props">
               <q-tr :props="props">
-                <q-td key="name" :props="props">
-                  {{ props.row.name }}
-                </q-td>
                 <q-td key="value" :props="props">
                   <div v-html="props.row.value"></div>
                 </q-td>
@@ -269,6 +312,19 @@ const removeRichTextBox = (id: number) => {
         />
       </q-dialog>
 
+      <q-dialog v-model="newFunctionModalOpen">
+        <FunctionEditor
+          v-on:save="(s) => saveNewFunction(s)"
+        />
+      </q-dialog>
+
+      <q-dialog v-model="editFunctionModalOpen">
+        <FunctionEditor
+          :statement="editingStatement"
+          v-on:save="() => finishEditStatement()"
+        />
+      </q-dialog>
+
       <q-page-sticky position="bottom-right" :offset="[32, 32]">
         <q-fab color="primary" icon="add" direction="left">
           <q-fab-action
@@ -279,15 +335,21 @@ const removeRichTextBox = (id: number) => {
             @click="() => openNewVariableDeclModal()"
           />
           <q-fab-action
-            color="secondary"
-            icon="code"
-            title="Add an expression"
-            @click="() => openNewExpressionModal()"
+              color="secondary"
+              icon="code"
+              title="Add an expression"
+              @click="() => openNewExpressionModal()"
+          />
+          <q-fab-action
+              color="secondary"
+              icon="functions"
+              title="Add a new function"
+              @click="() => openNewFunctionModal()"
           />
           <q-fab-action
             color="secondary"
             icon="text"
-            title="Add a Text Box"
+            title="Add a text box"
             @click="() => makeNewRichTextBox()"
           />
         </q-fab>

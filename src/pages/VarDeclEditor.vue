@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import * as math from 'mathjs'
 import {onMounted, ref} from 'vue'
 import {MathStatement} from '../support/parse'
 import {v4 as uuidv4} from 'uuid'
@@ -67,7 +68,9 @@ onMounted(() => {
   if ( props.statement ) {
     const [ define ] = props.statement.defines()
     newVariableName.value = define.name
-    newVariableValue.value = props.statement.raw
+
+    const [_, ...rest] = props.statement.raw.split('=')
+    newVariableValue.value = rest.join('=')
     updateNewVariablePreview()
   }
 })
