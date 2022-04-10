@@ -103,6 +103,7 @@ const openEditFunctionModal = () => {
   editFunctionModalOpen.value = true
 }
 
+const chartBoxKey = ref(uuidv4())
 const updateStatements = () => {
   statements.value = math.value.getStatements();
   try {
@@ -153,18 +154,21 @@ const saveNewVariable = (stmt: MathStatement) => {
   math.value.addStatement(stmt)
   newVariableModalOpen.value = false
   updateStatements()
+  chartBoxKey.value = uuidv4()
 };
 
 const saveNewExpression = (stmt: MathStatement) => {
   math.value.addStatement(stmt)
   newExpressionModalOpen.value = false
   updateStatements()
+  chartBoxKey.value = uuidv4()
 };
 
 const saveNewFunction = (stmt: MathStatement) => {
   math.value.addStatement(stmt)
   newFunctionModalOpen.value = false
   updateStatements()
+  chartBoxKey.value = uuidv4()
 }
 
 const editStatement = (stmt: MathStatement) => {
@@ -182,6 +186,7 @@ const editStatement = (stmt: MathStatement) => {
 const removeStatement = (stmt: MathStatement) => {
   math.value.removeStatement(stmt.id)
   updateStatements()
+  chartBoxKey.value = uuidv4()
 }
 
 const finishEditStatement = () => {
@@ -189,6 +194,7 @@ const finishEditStatement = () => {
   editVarDeclModalOpen.value = false
   editFunctionModalOpen.value = false
   updateStatements()
+  chartBoxKey.value = uuidv4()
 }
 
 /*
@@ -202,7 +208,6 @@ const makeNewRichTextBox = () => {
   richEditModal.value = true;
 };
 
-const chartBoxKey = ref(uuidv4())
 const chartBoxes = ref<ChartBox[]>([])
 
 const newChartModalOpen = ref(false)
@@ -213,6 +218,7 @@ const openNewChartModal = () => {
 const saveNewChartBox = (chartBox: ChartBox) => {
   chartBoxes.value.push(chartBox)
   newChartModalOpen.value = false
+  chartBoxKey.value = uuidv4()
 }
 
 const editingChartBox = ref<ChartBox | undefined>()
@@ -362,9 +368,12 @@ const saveEditorPage = async (close = false) => {
     return alert('Failed to save page: ' + result.message)
   }
 
+  const justCreated = !editorPageId.value
   editorPageId.value = result.data.pageId
   if ( close ) {
     await router.push('/Listings')
+  } else if ( justCreated ) {
+    await router.push(`/Editor/${editorPageId.value}`)
   }
 }
 
