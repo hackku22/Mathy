@@ -368,6 +368,35 @@ const saveEditorPage = async (close = false) => {
   }
 }
 
+const deleteEditorPage = async (close = false) => {
+  const params = {
+    serialData: JSON.stringify(serialize()),
+  } as any
+
+  if ( editorPageId.value ) {
+    params.pageId = editorPageId.value
+  }
+
+  const response = await fetch('/api/editor/page', {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(params),
+  })
+
+  const result = (await response.json()) as unknown as any
+  if (!result.success) {
+    return alert('Failed to delete page: ' + result.message)
+  }
+
+  editorPageId.value = result.data.pageId
+  if ( close ) {
+    await router.push('/Listings')
+  }
+}
+
 const loadEditorPage = async () => {
   if ( !editorPageId.value ) {
     return
@@ -566,6 +595,9 @@ onMounted(() => {
 
       <q-page-sticky position="top-right" :offset="[18, 90]">
         <q-btn fab icon="close" title="Save and close" color="primary" @click="() => saveEditorPage(true)"/>
+      </q-page-sticky>
+      <q-page-sticky position="top-right" :offset="[18, 162]">
+        <q-btn fab icon="delete_forever" title="Delete forever" color="primary" @click=""/>
       </q-page-sticky>
 
       <q-page-sticky position="bottom-right" :offset="[32, 32]">
