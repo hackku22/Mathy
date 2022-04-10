@@ -102,9 +102,9 @@ export class RichTextBox {
 }
 
 
-export class ImageBox {
+export class ImageContainer {
     constructor(
-        public text: string = '',
+        public url: string = '',
         public x: number = 0,
         public y: number = 0,
     ) {}

@@ -8,9 +8,10 @@ import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
+import ImageBox from '../components/ImageBox.vue'
 
 import FunctionEditor from '../components/FunctionEditor.vue'
-import { RichTextBox } from '../support/types'
+import { RichTextBox, ImageContainer } from '../support/types'
 import { stepX, stepY } from '../support/const'
 import { checkLoggedIn, loggedOut } from '../support/auth'
 import router from '../router'
@@ -219,6 +220,46 @@ const removeRichTextBox = (id: number) => {
 };
 
 /*
+  Image box
+*/
+
+const makeNewImageBox = () => {
+  images.value.push(new ImageContainer(''));
+  imageID.value = images.value.length - 1;
+  imageURL.value = images.value[richEditID.value].url;
+  imageModal.value = true;
+};
+
+const images = ref<ImageContainer[]>([]);
+
+const imageModal = ref(false);
+const imageURL = ref("");
+const imageID = ref(0);
+
+const imageEditStatement = (id: number) => {
+  imageModal.value = true;
+  imageID.value = id;
+  imageURL.value = images.value[imageID.value].url;
+};
+
+const moveImageBox = (id: number, x: number, y: number) => {
+  imageID.value = id;
+  images.value[imageID.value].x = x;
+  images.value[imageID.value].y = y;
+};
+
+
+
+function imageUpdateValue() {
+  images.value[imageID.value].url = imageURL.value;
+}
+const removeimageBox = (id: number) => {
+  console.log(images.value[id]);
+  images.value.splice(id, 1);
+};
+
+
+/*
   Auth
 */
 const status = ref(checkLoggedIn())
@@ -388,6 +429,12 @@ onMounted(() => {
             title="Add a text box"
             @click="() => makeNewRichTextBox()"
           />
+          <q-fab-action
+            color="secondary"
+            icon="image"
+            title="Add an image box"
+            @click="() => makeNewImageBox()"
+          />
         </q-fab>
       </q-page-sticky>
 
@@ -407,6 +454,25 @@ onMounted(() => {
           v-on:edit="() => (item.text ? richEditStatement(index) : {})"
           v-on:remove="() => removeRichTextBox(index)"
           v-on:move="(x, y) => moveRichTextBox(index, x, y)"
+        />
+      </div>
+
+      <q-dialog v-model="imageModal">
+        <q-card autogrow style="min-width: 25em;">
+          <q-input autogrow v-model="imageURL"/>
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancel" v-close-popup></q-btn>
+            <q-btn flat label="Save" @click="imageUpdateValue" v-close-popup></q-btn>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+      <div v-for="(item, index) in images" style="display: flex">
+        <ImageBox
+          :value="item"
+          v-on:edit="() => (item.url ? imageEditStatement(index) : {})"
+          v-on:remove="() => removeimageBox(index)"
+          v-on:move="(x, y) => moveImageBox(index, x, y)"
         />
       </div>
     </q-page-container>
