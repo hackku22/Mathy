@@ -8,17 +8,12 @@ import Statement from '../components/Statement.vue'
 import VarDeclEditor from '../components/VarDeclEditor.vue'
 import ExpressionEditor from '../components/ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
-<<<<<<< HEAD
 import ImageBox from '../components/ImageBox.vue'
 
 import FunctionEditor from '../components/FunctionEditor.vue'
 import { RichTextBox, ImageContainer } from '../support/types'
-=======
-import FunctionEditor from '../components/FunctionEditor.vue'
 import RangeChart from '../components/RangeChart.vue'
 import RangeChartEditor from './RangeChartEditor.vue'
-import { RichTextBox } from '../support/types'
->>>>>>> 17a6aea76db7a943a190d4db6524e6b16c01392e
 import { stepX, stepY } from '../support/const'
 import { checkLoggedIn, loggedOut } from '../support/auth'
 import router from '../router'
