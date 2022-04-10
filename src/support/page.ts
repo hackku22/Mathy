@@ -9,7 +9,7 @@ import {EvaluationResult, hasOwnProperty, Maybe, StatementID, VariableName} from
  */
 export class MathPage {
     /** The statements on the page. */
-    protected statements: Record<StatementID, MathStatement> = {}
+    statements: Record<StatementID, MathStatement> = {}
 
     static deserialize(vals: [string, [StatementID, string, number, number][]]) {
         const inst = new this(vals[0])

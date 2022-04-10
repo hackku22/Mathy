@@ -548,6 +548,7 @@ onMounted(() => {
       </q-dialog>
 
       <q-dialog v-model="newChartModalOpen">
+        <!-- // @ts-ignore -->
         <RangeChartEditor :page="math" v-on:save="c => saveNewChartBox(c)" />
       </q-dialog>
 
