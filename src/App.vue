@@ -16,8 +16,10 @@ import { ref } from "vue";
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
+            
+
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
+            <img src="./assets/logo.svg" />
           </q-avatar>
           Title
         </q-toolbar-title>
