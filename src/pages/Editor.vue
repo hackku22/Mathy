@@ -195,7 +195,9 @@ const makeNewRichTextBox = () => {
   richEditModal.value = true;
 };
 
-const richTextStatements = ref<RichTextBox[]>([]);
+const richTextStatements = ref<RichTextBox[]>([
+  new RichTextBox("Hello World"),   
+]);
 
 const richEditModal = ref(false);
 const richEditExpression = ref("");
@@ -256,16 +258,18 @@ onMounted(() => {
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar>Title
-        </q-toolbar-title>
+          <q-avatar size="50px">
+            <img src="../assets/l2.svg" />
+          </q-avatar>
+          <span style="font-family: 'Cinzel Decorative', cursive;">
+            Crystal Math Worktable
+          </span>
+        </q-toolbar-title>         
+
+        <span v-if="status" @click="logout()" label="Logout">Logout</span>
+
       </q-toolbar>
-      <q-tabs>
-        <q-route-tab to="/Scratch" label="Scratch" />
-        <q-route-tab to="/Editor" label="Editor" />
-        <q-tab v-if="status" @click="logout()" label="Logout" />
-      </q-tabs>
+
     </q-header>
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
@@ -320,7 +324,7 @@ onMounted(() => {
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container id="editor">
+    <q-page-container id="editor" style='padding=0'>
       <!--      <WrapperBox />-->
 
       <span v-for="statement in statements" style="display: flex">
@@ -416,20 +420,20 @@ onMounted(() => {
       </div>
     </q-page-container>
 
-    <q-footer reveal elevated class="bg-grey-8 text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          <div>Status</div>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
+
   </q-layout>
 </template>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
+
+
+
 #editor {
   background-image: url(../assets/grid.svg);
   background-repeat: repeat;
   height: 100%;
+    padding-top: 0px
+
 }
 </style>
