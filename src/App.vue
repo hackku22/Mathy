@@ -63,7 +63,7 @@ Dark.set(true)
           <span style="font-family: 'Cinzel Decorative', cursive;">
             Crystal Math Worktable
           </span>
-          <q-icon icon="fa-solid fa-arrow-up-left-from-circle" v-if="status" @click="logout()" label="Logout" />
+          <q-btn icon="fa-solid fa-arrow-up-left-from-circle" v-if="status" @click="logout()" label="Logout" />
         </q-toolbar-title>
       </q-toolbar>
 

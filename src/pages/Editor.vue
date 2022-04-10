@@ -18,7 +18,12 @@ import { stepX, stepY } from '../support/const'
 import { checkLoggedIn, loggedOut } from '../support/auth'
 import router from '../router'
 
-const math = new MathPage(uuidv4());
+const props = defineProps<{
+  pageId?: number,
+}>()
+
+const math = ref(new MathPage(uuidv4()));
+const pageTitle = ref('New Page');
 const statements = ref<MathStatement[]>([]);
 const evaluation = ref<EvaluationResult | undefined>();
 const statementsKey = ref<string>(uuidv4());
@@ -99,9 +104,9 @@ const openEditFunctionModal = () => {
 }
 
 const updateStatements = () => {
-  statements.value = math.getStatements();
+  statements.value = math.value.getStatements();
   try {
-    evaluation.value = math.evaluate()
+    evaluation.value = math.value.evaluate()
     const variableValues: ({ name: string, value: string })[] = []
 
     for (const name in evaluation.value!.variables) {
@@ -124,7 +129,7 @@ const updateStatements = () => {
     variableListingRows.value = variableValues
 
     const functionValues: ({ name: string, value: string })[] = []
-    for (const stmt of math.functions()) {
+    for (const stmt of math.value.functions()) {
       const node = stmt.parse() as math.FunctionAssignmentNode
       functionValues.push({
         name: node.name,
@@ -145,19 +150,19 @@ onMounted(() => {
 })
 
 const saveNewVariable = (stmt: MathStatement) => {
-  math.addStatement(stmt)
+  math.value.addStatement(stmt)
   newVariableModalOpen.value = false
   updateStatements()
 };
 
 const saveNewExpression = (stmt: MathStatement) => {
-  math.addStatement(stmt)
+  math.value.addStatement(stmt)
   newExpressionModalOpen.value = false
   updateStatements()
 };
 
 const saveNewFunction = (stmt: MathStatement) => {
-  math.addStatement(stmt)
+  math.value.addStatement(stmt)
   newFunctionModalOpen.value = false
   updateStatements()
 }
@@ -175,7 +180,7 @@ const editStatement = (stmt: MathStatement) => {
 }
 
 const removeStatement = (stmt: MathStatement) => {
-  math.removeStatement(stmt.id)
+  math.value.removeStatement(stmt.id)
   updateStatements()
 }
 
@@ -323,6 +328,79 @@ onMounted(() => {
   }
 })
 
+const serialize = () => {
+  return {
+    title: pageTitle.value,
+    page: math.value.serialize(),
+    textBoxes: richTextStatements.value.map(x => x.serialize()),
+    chartBoxes: chartBoxes.value.map(x => x.serialize()),
+    imageBoxes: images.value.map(x => x.serialize()),
+  }
+}
+
+const editorPageId = ref<number|undefined>()
+const saveEditorPage = async () => {
+  const params = {
+    serialData: JSON.stringify(serialize()),
+  } as any
+
+  if ( editorPageId.value ) {
+    params.pageId = editorPageId.value
+  }
+
+  const response = await fetch('/api/editor/page', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(params),
+  })
+
+  const result = (await response.json()) as unknown as any
+  if (!result.success) {
+    return alert('Failed to save page: ' + result.message)
+  }
+
+  editorPageId.value = result.data.pageId
+}
+
+const loadEditorPage = async () => {
+  if ( !editorPageId.value ) {
+    return
+  }
+
+  const pageId = editorPageId.value
+  const response = await fetch(`/api/editor/page?pageId=${pageId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    },
+  })
+
+  const result = (await response.json()) as unknown as any
+  if (!result.success) {
+    return alert('Failed to load page: ' + result.message)
+  }
+
+  const serialData = result.data.serialData
+  const serialized = JSON.parse(serialData) as any
+  math.value = MathPage.deserialize(serialized.page)
+  richTextStatements.value = serialized.textBoxes.map((box: any) => RichTextBox.deserialize(box))
+  chartBoxes.value = serialized.chartBoxes.map((box: any) => ChartBox.deserialize(box))
+  images.value = serialized.imageBoxes.map((box: any) => ImageContainer.deserialize(box))
+  pageTitle.value = serialized.title ?? 'New Page'
+  updateStatements()
+  chartBoxKey.value = uuidv4()
+}
+
+onMounted(() => {
+  if ( props.pageId ) {
+    editorPageId.value = props.pageId
+    loadEditorPage()
+  }
+})
+
 </script>
 
 <template>
@@ -335,7 +413,9 @@ onMounted(() => {
           <q-avatar size="50px">
             <img src="../assets/l2.svg" />
           </q-avatar>
-          <span style="font-family: 'Cinzel Decorative', cursive;">Crystal Math Worktable</span>
+          <span style="font-family: 'Cinzel Decorative', cursive;">
+            Crystal Math Worktable
+          </span>
         </q-toolbar-title>
 
         <span v-if="status" @click="logout()" label="Logout">Logout</span>
@@ -344,6 +424,13 @@ onMounted(() => {
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
       <div class="column" style="height: 100%">
+        <div>
+          <q-input
+            v-model="pageTitle"
+            label="Title"
+            style="padding: 10px"
+          ></q-input>
+        </div>
         <div class="col">
           <q-table
             flat
@@ -394,9 +481,7 @@ onMounted(() => {
       <!-- drawer content -->
     </q-drawer>
 
-    <q-page-container id="editor" style="padding=0">
-      <!--      <WrapperBox />-->
-
+    <q-page-container id="editor" style='padding: 0'>
       <span v-for="(chartBox, index) in chartBoxes" style="display: flex">
         <RangeChart
           :fn="math.getFunctionByNameOrFail(chartBox.fnName)"
@@ -462,6 +547,10 @@ onMounted(() => {
           v-on:save="() => saveEditingChartBox()"
         />
       </q-dialog>
+
+      <q-page-sticky position="top-right" :offset="[18, 18]">
+        <q-btn fab icon="save" color="primary" @click="() => saveEditorPage()"/>
+      </q-page-sticky>
 
       <q-page-sticky position="bottom-right" :offset="[32, 32]">
         <q-fab color="primary" icon="add" direction="left">

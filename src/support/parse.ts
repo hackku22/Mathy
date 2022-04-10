@@ -264,6 +264,10 @@ export class MathStatement {
         return new MathStatement(uuidv4() as StatementID, raw)
     }
 
+    static deserialize(vals: [StatementID, string, number, number]) {
+        return new this(...vals)
+    }
+
     constructor(
         /** Unique ID of this statement. */
         public readonly id: StatementID,
@@ -277,6 +281,15 @@ export class MathStatement {
         /** The y position in the grid. */
         public y: number = 0,
     ) {}
+
+    serialize(): [StatementID, string, number, number] {
+        return [
+            this.id,
+            this.raw,
+            this.x,
+            this.y,
+        ]
+    }
 
     /** Parse the raw statement to an AST. */
     parse(): math.MathNode {

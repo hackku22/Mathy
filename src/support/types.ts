@@ -94,24 +94,52 @@ export interface EvaluationResult {
 
 
 export class RichTextBox {
+    static deserialize(vals: [string, number, number]) {
+        return new this(...vals)
+    }
+
     constructor(
         public text: string = '',
         public x: number = 0,
         public y: number = 0,
     ) {}
+
+    serialize(): [string, number, number] {
+        return [
+            this.text,
+            this.x,
+            this.y,
+        ]
+    }
 }
 
 
 export class ImageContainer {
+    static deserialize(vals: [string, number, number]) {
+        return new this(...vals)
+    }
+
     constructor(
         public url: string = '',
         public x: number = 0,
         public y: number = 0,
     ) {}
+
+    serialize(): [string, number, number] {
+        return [
+            this.url,
+            this.x,
+            this.y,
+        ]
+    }
 }
 
 
 export class ChartBox {
+    static deserialize(vals: [string, number, number, number, number, number]) {
+        return new this(...vals)
+    }
+
     // eslint-disable-next-line max-params
     constructor(
         public fnName: string,
@@ -121,6 +149,17 @@ export class ChartBox {
         public x: number = 0,
         public y: number = 0,
     ) {}
+
+    serialize(): [string, number, number, number, number, number] {
+        return [
+            this.fnName,
+            this.minX,
+            this.maxX,
+            this.stepX,
+            this.x,
+            this.y,
+        ]
+    }
 }
 
 
