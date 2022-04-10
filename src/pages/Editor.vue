@@ -10,6 +10,7 @@ import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
 import {RichTextBox} from '../support/types'
 import { stepX, stepY } from '../support/const'
+import { cos } from 'mathjs'
 
 const math = new MathPage(uuidv4());
 const statements = ref<MathStatement[]>([]);
@@ -30,6 +31,13 @@ const variableListingColumns = [
     label: 'Value',
   },
 ]
+
+const stmOnControlledDragStop = (stmt: MathStatement) => (e: MouseEvent) => {
+  const { x, y } = e;
+  stmt.x = x;
+  stmt.y = y;
+}
+
 
 const variableListingRows = ref<({name: string, value: string})[]>([])
 
@@ -141,16 +149,26 @@ const richEditExpression = ref("");
 const richEditID = ref(0);
 
 const richEditStatement = (id: number) => {
-  console.log("editing statement", id, richEditModal);
+  console.log("editing Text", id, richEditModal);
   richEditModal.value = true;
   richEditID.value = id;
   richEditExpression.value = richTextStatements.value[richEditID.value].text;
 };
 
+const moveRichTextBox = (id: number,x:number,y:number) => {
+  console.log("Moving Text", id, x,y);
+  richEditID.value = id;
+  richTextStatements.value[richEditID.value].x = x;
+  richTextStatements.value[richEditID.value].y = y;
+};
+
+
+
 function richUpdateValue() {
   richTextStatements.value[richEditID.value].text = richEditExpression.value;
 }
 const removeRichTextBox = (id: number) => {
+  console.log(richTextStatements.value[id]);
   richTextStatements.value.splice(id, 1);
 };
 </script>
@@ -234,6 +252,8 @@ const removeRichTextBox = (id: number) => {
       <span v-for="statement in statements" style="display: flex">
         <Draggable
           :grid="[stepX, stepY]"
+          :position="{ x: statement.x, y: statement.y }"
+          @stop="stmOnControlledDragStop(statement)"
         >
           <div>
             <Statement
@@ -313,6 +333,7 @@ const removeRichTextBox = (id: number) => {
           :value="item"
           v-on:edit="() => (item.text ? richEditStatement(index) : {})"
           v-on:remove="() => removeRichTextBox(index)"
+          v-on:move="(x, y) => moveRichTextBox(index, x, y)"
         />
       </div>
     </q-page-container>

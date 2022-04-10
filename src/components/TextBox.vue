@@ -4,12 +4,32 @@ import { RichTextBox } from "../support/types";
 import { stepX, stepY } from "../support/const";
 const props = defineProps<{value: RichTextBox}>();
 
+const emit = defineEmits<{
+  (eventName: 'move', x: number,y:number): void,
+}>()
+
+
+function onControlledDrag(e) {
+   const { x, y } = e.data;
+   props.value.x = x;
+   props.value.y = y;
+   console.log(e)
+}
+function onControlledDragStop(e) {
+    const { x, y } = e.data;
+    console.log(self)
+    emit('move', [x, y]);
+  onControlledDrag(e);
+}
+
 </script>
 
 <template>
   <Draggable
     :grid="[stepX, stepY]"
     :default-position="{ x: props.value.x, y: props.value.y }"
+    :position="{ x: props.value.x, y: props.value.y }"
+    @stop="onControlledDragStop"
   >
     <div>
       <q-card flat bordered>
