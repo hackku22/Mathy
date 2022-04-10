@@ -339,7 +339,7 @@ const serialize = () => {
 }
 
 const editorPageId = ref<number|undefined>()
-const saveEditorPage = async () => {
+const saveEditorPage = async (close = false) => {
   const params = {
     serialData: JSON.stringify(serialize()),
   } as any
@@ -363,6 +363,9 @@ const saveEditorPage = async () => {
   }
 
   editorPageId.value = result.data.pageId
+  if ( close ) {
+    await router.push('/Listings')
+  }
 }
 
 const loadEditorPage = async () => {
@@ -398,6 +401,14 @@ onMounted(() => {
   if ( props.pageId ) {
     editorPageId.value = props.pageId
     loadEditorPage()
+    return
+  }
+
+  const paramPageId = router.currentRoute.value.params.pageId
+  if ( !Array.isArray(paramPageId) && !isNaN(parseInt(paramPageId, 10)) ) {
+    editorPageId.value = parseInt(paramPageId, 10)
+    loadEditorPage()
+    return
   }
 })
 
@@ -549,7 +560,11 @@ onMounted(() => {
       </q-dialog>
 
       <q-page-sticky position="top-right" :offset="[18, 18]">
-        <q-btn fab icon="save" color="primary" @click="() => saveEditorPage()"/>
+        <q-btn fab icon="save" title="Save" color="primary" @click="() => saveEditorPage()"/>
+      </q-page-sticky>
+
+      <q-page-sticky position="top-right" :offset="[18, 90]">
+        <q-btn fab icon="close" title="Save and close" color="primary" @click="() => saveEditorPage(true)"/>
       </q-page-sticky>
 
       <q-page-sticky position="bottom-right" :offset="[32, 32]">

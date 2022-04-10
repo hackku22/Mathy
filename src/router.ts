@@ -18,6 +18,10 @@ const routes = [
         component: () => import(/* webpackChunkName: "Editor" */ './pages/Editor.vue'),
     },
     {
+        path: '/editor/:pageId',
+        component: () => import(/* webpackChunkName: "Editor" */ './pages/Editor.vue'),
+    },
+    {
         path: '/listings',
         name: 'Listings',
         component: () => import(/* webpackChunkName: "Listings" */ './pages/Listings.vue'),
