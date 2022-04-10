@@ -101,10 +101,10 @@ const makeNewRichTextBox = () => {
   richEditID.value = richTextStatements.value.length - 1;
   richEditExpression.value = richTextStatements.value[richEditID.value].text;
   richEditModal.value = true;
-  console.log("editing statement", id, richEditModal);
+  console.log("editing statement",richEditID.value, richEditModal);
 };
 
-const richTextStatements = ref([]);
+const richTextStatements = ref([new RichTextBox("Hello World")]);
 
 const richEditModal = ref(false);
 const richEditExpression = ref("");
