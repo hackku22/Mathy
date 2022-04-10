@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { RichTextBox } from "../types.ts";
-import { stepX, stepY } from "../support/const.ts";
-const props = defineProps({
-  value: {
-    type: RichTextBox,
-  },
-});
+import { RichTextBox } from "../support/types";
+import { stepX, stepY } from "../support/const";
+const props = defineProps<{value: RichTextBox}>();
 </script>
 
 <template>

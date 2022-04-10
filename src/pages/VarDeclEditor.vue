@@ -3,7 +3,7 @@ import {ref} from 'vue'
 import {MathStatement} from '../support/parse'
 import {v4 as uuidv4} from 'uuid'
 import Katex from '../components/Katex.vue'
-import {StatementID} from '../types'
+import {StatementID} from '../support/types'
 
 const emit = defineEmits<{
   (eventName: 'save', statement: MathStatement): void,
