@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {defineEmits, onMounted, ref} from 'vue'
 import {MathStatement} from '../support/parse'
-import Katex from '../components/Katex.vue'
+import Katex from './Katex.vue'
 import { v4 as uuidv4 } from 'uuid'
 import {StatementID} from '../support/types'
 
@@ -64,7 +64,7 @@ onMounted(() => {
 
 <template>
   <q-card>
-    <q-card-section>
+    <q-card-section v-if="expressionValue">
       <div style="display: flex; justify-content: center">
         <Katex
           :key="expressionPreviewKey"

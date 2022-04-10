@@ -69,7 +69,7 @@ onMounted(() => {
 <template>
   <q-card>
     <q-card-section>
-      <div style="display: flex; justify-content: center">
+      <div  v-if="functionValue" style="display: flex; justify-content: center">
         <Katex
           :key="functionPreviewKey"
           :statement="functionPreview"
