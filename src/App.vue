@@ -7,47 +7,48 @@ import { MathPage } from "./support/page";
 import { onMounted, ref } from "vue";
 import { checkLoggedIn, loggedOut, loggedIn } from "./support/auth";
 import router from "./router";
+import { Dark } from "quasar";
 
 (window as any).Stmt = MathStatement;
 (window as any).Pg = MathPage;
 
-const status = ref(checkLoggedIn())
-
-; (async () => {
-    const response = await fetch('/api/login/status/', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
-    })
-    const res = (await response.json()) as unknown as any
-    if (res.data.hasUser) {
-      loggedIn()
-    }
-    status.value = checkLoggedIn()
-  })()
+const status = ref(checkLoggedIn());
+(async () => {
+  const response = await fetch("/api/login/status/", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+  const res = ((await response.json()) as unknown) as any;
+  if (res.data.hasUser) {
+    loggedIn();
+  }
+  status.value = checkLoggedIn();
+})();
 
 onMounted(() => {
-  status.value = checkLoggedIn()
-  console.log(status.value)
-})
+  status.value = checkLoggedIn();
+  console.log(status.value);
+});
 
 router.afterEach(() => {
-  status.value = checkLoggedIn()
-  console.log(status.value)
-})
+  status.value = checkLoggedIn();
+  console.log(status.value);
+});
 
 const logout = async () => {
-  const response = await fetch('/api/logout/', {
-    method: 'POST',
+  const response = await fetch("/api/logout/", {
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
+      Accept: "application/json",
     },
-  })
-  loggedOut()
-  status.value = checkLoggedIn()
-  router.push({path: '/'})
-}
+  });
+  loggedOut();
+  status.value = checkLoggedIn();
+  router.push({ path: "/" });
+};
+Dark.set(true)
 
 </script>
 
@@ -56,20 +57,22 @@ const logout = async () => {
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
-            
-
-          <q-avatar size="100px">
-            <img src="./assets/logo.svg" />
+          <q-avatar size="50px">
+            <img src="./assets/l2.svg" />
           </q-avatar>
-          Title
+          <span style="font-family: 'Cinzel Decorative', cursive;">
+            Crystal Math Worktable
+          </span>
+          <q-tab v-if="status" @click="logout()" label="Logout" />
+
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs>
-        <q-route-tab to="/Scratch" label="Scratch" />
-        <q-route-tab to="/Editor" label="Editor" />
-        <q-tab v-if="status" @click="logout()" label="Logout" />
-      </q-tabs>
+      <!-- <q-tabs>
+          <q-route-tab to="/Scratch" label="Scratch" />
+          <q-route-tab to="/Editor" label="Editor" />
+          <q-tab v-if="status" @click="logout()" label="Logout" />
+        </q-tabs> -->
     </q-header>
 
     <q-page-container style="display: flex;padding-top: 20px;">
@@ -79,11 +82,8 @@ const logout = async () => {
 </template>
 
 <style>
-body {
-  margin-top: 0px;
-  height: 100%;
-  background: #1e2361;
-}
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap");
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -92,4 +92,9 @@ body {
   color: #4484c4;
   margin-top: 60px;
 }
+.titleBar {
+  font-family: "Cinzel Decorative";
+}
+
+
 </style>

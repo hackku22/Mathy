@@ -12,7 +12,7 @@ import router from './router'
                     App UI
 --------------------------------------------------
 */
-import { Quasar } from 'quasar'
+import { Dark, Quasar  } from 'quasar'
 
 // Import icon libraries
 import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css'
@@ -46,7 +46,21 @@ import App from './App.vue'
 const app = createApp(App)
 
 app.use(Quasar, {
-    plugins: {}, // import Quasar plugins and add here
+    plugins: {Dark}, // import Quasar plugins and add here
+    config: {
+        brand: {
+            primary: '#553564',
+            secondary: '#c1eeff',
+            accent: '#9C27B0',
+
+            dark: '#1d1d1d',
+
+            positive: '#21BA45',
+            negative: '#C10015',
+            info: '#31CCEC',
+            warning: '#F2C037',
+        },
+    },
 })
 
 app.use(router)

@@ -15,11 +15,15 @@ import { stepX, stepY } from '../support/const'
 import { checkLoggedIn, loggedOut } from '../support/auth'
 import router from '../router'
 
+
 const math = new MathPage(uuidv4());
 const statements = ref<MathStatement[]>([]);
 const evaluation = ref<EvaluationResult | undefined>();
 const statementsKey = ref<string>(uuidv4());
 const leftDrawerOpen = ref(false);
+
+
+
 
 const variableListingColumns = [
   {
@@ -34,6 +38,7 @@ const variableListingColumns = [
     label: 'Value',
   },
 ]
+  
 
 const stmOnControlledDragStop = (stmt: MathStatement) => (e: { event: MouseEvent, data: { x: number, y: number } }) => {
   console.log(e)

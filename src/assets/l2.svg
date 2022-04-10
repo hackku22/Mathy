@@ -51,7 +51,7 @@
        style="fill:#550000">
       <text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke:#ffffff;stroke-width:0.50484;stroke-miterlimit:4.8;stroke-dasharray:none;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke:#ffffff;stroke-width:0;stroke-miterlimit:4.8;stroke-dasharray:none;stroke-opacity:1"
          x="-37.659836"
          y="831.96069"
          id="text6305"
@@ -60,10 +60,10 @@
            id="tspan6303"
            x="-37.659836"
            y="831.96069"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke-width:0.50484;stroke:#ffffff;stroke-opacity:1">C</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke-width:0;stroke:#ffffff;stroke-opacity:1;stroke-dasharray:none">C</tspan></text>
       <text
          xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:463.256px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke:#ffffff;stroke-width:0.24128;stroke-miterlimit:4.8;stroke-dasharray:none;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:463.256px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke:#ffffff;stroke-width:0;stroke-miterlimit:4.8;stroke-dasharray:none;stroke-opacity:1"
          x="120.35316"
          y="634.82605"
          id="text6413"
@@ -72,7 +72,7 @@
            id="tspan6411"
            x="120.35316"
            y="634.82605"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke-width:0.24128;stroke:#ffffff;stroke-opacity:1">M</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke-width:0;stroke:#ffffff;stroke-opacity:1;stroke-dasharray:none">M</tspan></text>
     </g>
   </g>
 </svg>
