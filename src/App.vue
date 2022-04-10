@@ -18,7 +18,7 @@ import { ref } from "vue";
         <q-toolbar-title>
             
 
-          <q-avatar>
+          <q-avatar size="100px">
             <img src="./assets/logo.svg" />
           </q-avatar>
           Title

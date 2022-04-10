@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg13372"
+   inkscape:version="1.2-beta (1b65182ce9, 2022-04-05)"
+   sodipodi:docname="l2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview13374"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.51843089"
+     inkscape:cx="-180.35191"
+     inkscape:cy="555.52245"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-7"
+     inkscape:window-y="-7"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid59924" />
+  </sodipodi:namedview>
+  <defs
+     id="defs13369" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       inkscape:groupmode="layer"
+       id="layer2"
+       inkscape:label="Text"
+       transform="matrix(0.26458333,0,0,0.26458333,10.166581,13.777983)"
+       style="fill:#550000">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke:#ffffff;stroke-width:0.50484;stroke-miterlimit:4.8;stroke-dasharray:none;stroke-opacity:1"
+         x="-37.659836"
+         y="831.96069"
+         id="text6305"
+         transform="scale(0.96764101,1.0334411)"><tspan
+           sodipodi:role="line"
+           id="tspan6303"
+           x="-37.659836"
+           y="831.96069"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:969.291px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke-width:0.50484;stroke:#ffffff;stroke-opacity:1">C</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:463.256px;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative';fill:#ffffff;stroke:#ffffff;stroke-width:0.24128;stroke-miterlimit:4.8;stroke-dasharray:none;stroke-opacity:1"
+         x="120.35316"
+         y="634.82605"
+         id="text6413"
+         transform="scale(0.97653789,1.0240258)"><tspan
+           sodipodi:role="line"
+           id="tspan6411"
+           x="120.35316"
+           y="634.82605"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Cinzel Decorative';-inkscape-font-specification:'Cinzel Decorative Bold';fill:#ffffff;stroke-width:0.24128;stroke:#ffffff;stroke-opacity:1">M</tspan></text>
+    </g>
+  </g>
+</svg>
