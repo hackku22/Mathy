@@ -268,10 +268,13 @@ export class MathStatement {
         public readonly id: StatementID,
 
         /** The raw statement input by the user. */
-        public readonly raw: string,
+        public raw: string,
 
-        public x: Number = 0,
-        public y: Number = 0,
+        /** The x position in the grid. */
+        public x: number = 0,
+
+        /** The y position in the grid. */
+        public y: number = 0,
     ) {}
 
     /** Parse the raw statement to an AST. */
@@ -340,5 +343,13 @@ export class MathStatement {
         }
 
         return true
+    }
+
+    isDeclaration(): boolean {
+        return this.defines().length > 0
+    }
+
+    isFunctionDeclaration(): boolean {
+        return false
     }
 }

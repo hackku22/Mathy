@@ -25,12 +25,12 @@ const props = defineProps({
                   <q-list>
                     <q-item clickable>
                       <q-item-section @click="() => $emit('edit')"
-                        >Edit</q-item-section
+                      >Edit</q-item-section
                       >
                     </q-item>
                     <q-item clickable>
                       <q-item-section @click="() => $emit('remove')"
-                        >Remove</q-item-section
+                      >Remove</q-item-section
                       >
                     </q-item>
                   </q-list>

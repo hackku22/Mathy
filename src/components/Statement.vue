@@ -36,14 +36,6 @@ computed(() => value = getValueStatement())
   .sidebar {
     padding-left: 10px;
   }
-
-  .edit-button {
-    border: none;
-  }
-
-  .edit-button:hover {
-    cursor: pointer;
-  }
 </style>
 
 <template>
@@ -56,9 +48,18 @@ computed(() => value = getValueStatement())
       </div>
     </div>
     <div class="sidebar">
-      <button class="edit-button" @click="() => $emit('edit')" title="Edit this expression">
-        <img src="../assets/edit.svg" alt="Edit" height="16">
-      </button>
+      <q-btn color="grey-7" round flat icon="more_vert">
+        <q-menu cover auto-close>
+          <q-list>
+            <q-item clickable>
+              <q-item-section @click="() => $emit('edit')">Edit</q-item-section>
+            </q-item>
+            <q-item clickable>
+              <q-item-section @click="() => $emit('remove')">Remove</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+      </q-btn>
     </div>
   </div>
 </template>

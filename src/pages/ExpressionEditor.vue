@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import {defineEmits, ref} from 'vue'
+import {defineEmits, onMounted, ref} from 'vue'
 import {MathStatement} from '../support/parse'
 import Katex from '../components/Katex.vue'
 import { v4 as uuidv4 } from 'uuid'
 import {StatementID} from '../types'
+
+const props = defineProps<{
+  statement?: MathStatement,
+}>()
 
 const emit = defineEmits<{
   (eventName: 'save', statement: MathStatement): void
@@ -39,11 +43,23 @@ const saveExpression = () => {
     return
   }
 
-  emit('save', new MathStatement(
-      uuidv4() as StatementID,
-      expressionValue.value
-  ))
+  if ( props.statement ) {
+    props.statement.raw = expressionValue.value
+    emit('save', props.statement)
+  } else {
+    emit('save', new MathStatement(
+        uuidv4() as StatementID,
+        expressionValue.value
+    ))
+  }
 }
+
+onMounted(() => {
+  if ( props.statement ) {
+    expressionValue.value = props.statement.raw
+    updateExpressionPreview()
+  }
+})
 </script>
 
 <template>

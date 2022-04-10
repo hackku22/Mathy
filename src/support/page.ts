@@ -21,6 +21,11 @@ export class MathPage {
         return Object.values(this.statements)
     }
 
+    /** Remove a statement from the math page. */
+    removeStatement(id: StatementID) {
+        delete this.statements[id]
+    }
+
     /** Get a statement by ID if it exists. */
     getStatement(id: StatementID): Maybe<MathStatement> {
         return this.statements[id]

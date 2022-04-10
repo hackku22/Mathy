@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import WrapperBox from '../components/WrapperBox.vue'
 import {MathPage} from '../support/page'
 import {MathStatement} from '../support/parse'
-import Katex from '../components/Katex.vue'
-import {EvaluationResult, hasOwnProperty, StatementID} from '../types'
+import {EvaluationResult, hasOwnProperty} from '../types'
 import Statement from '../components/Statement.vue'
 import VarDeclEditor from './VarDeclEditor.vue'
 import ExpressionEditor from './ExpressionEditor.vue'
 import TextBox from '../components/TextBox.vue'
-import {RichTextBox} from "../types.ts";
-import { stepX, stepY } from "../support/const.ts";
+import {RichTextBox} from '../types'
+import { stepX, stepY } from '../support/const'
 
 const math = new MathPage(uuidv4())
 const statements = ref<MathStatement[]>([])
@@ -47,6 +45,17 @@ const openNewVariableDeclModal = () => {
 const newExpressionModalOpen = ref(false)
 const openNewExpressionModal = () => {
   newExpressionModalOpen.value = true
+}
+
+const editingStatement = ref<MathStatement|undefined>()
+const editExpressionModalOpen = ref(false)
+const openEditExpressionModal = () => {
+  editExpressionModalOpen.value = true
+}
+
+const editVarDeclModalOpen = ref(false)
+const openEditVarDeclModal = () => {
+  editVarDeclModalOpen.value = true
 }
 
 const updateStatements = () => {
@@ -89,6 +98,27 @@ const saveNewVariable = (stmt: MathStatement) => {
 const saveNewExpression = (stmt: MathStatement) => {
   math.addStatement(stmt)
   newExpressionModalOpen.value = false
+  updateStatements()
+}
+
+const editStatement = (stmt: MathStatement) => {
+  editingStatement.value = stmt
+  if ( stmt.isDeclaration() ) {
+    openEditVarDeclModal()
+  } else if ( stmt.isFunctionDeclaration() ) {
+
+  } else {
+    openEditExpressionModal()
+  }
+}
+
+const removeStatement = (stmt: MathStatement) => {
+  math.removeStatement(stmt.id)
+  updateStatements()
+}
+
+const finishEditStatement = () => {
+  editExpressionModalOpen.value = false
   updateStatements()
 }
 
@@ -204,6 +234,8 @@ function richUpdateValue() {
             :key="statementsKey"
             :statement="statement"
             :evaluation="evaluation"
+            v-on:edit="() => editStatement(statement)"
+            v-on:remove="() => removeStatement(statement)"
           />
         </div>
 
@@ -219,6 +251,20 @@ function richUpdateValue() {
       <q-dialog v-model="newExpressionModalOpen">
         <ExpressionEditor
           v-on:save="s => saveNewExpression(s)"
+        />
+      </q-dialog>
+
+      <q-dialog v-model="editExpressionModalOpen">
+        <ExpressionEditor
+          :statement="editingStatement"
+          v-on:save="() => finishEditStatement()"
+        />
+      </q-dialog>
+
+      <q-dialog v-model="editVarDeclModalOpen">
+        <VarDeclEditor
+          :statement="editingStatement"
+          v-on:save="() => finishEditStatement()"
         />
       </q-dialog>
 
