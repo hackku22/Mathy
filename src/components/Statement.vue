@@ -6,11 +6,11 @@ import Katex from './Katex.vue'
 
 const props = defineProps<{
   statement: MathStatement,
-  evaluation: EvaluationResult,
+  evaluation?: EvaluationResult,
 }>()
 
 const getValueStatement = (): Maybe<MathStatement> => {
-  const value = props.evaluation.statements[props.statement.id]
+  const value = props.evaluation?.statements?.[props.statement.id]
   if ( value ) {
     return MathStatement.temp(String(value))
   }
@@ -36,10 +36,18 @@ computed(() => value = getValueStatement())
   .sidebar {
     padding-left: 10px;
   }
+
+  .edit-button {
+    border: none;
+  }
+
+  .edit-button:hover {
+    cursor: pointer;
+  }
 </style>
 
 <template>
-  <div class="math-statement">
+  <div class="math-statement" style="background: white">
     <div class="content">
       <Katex :statement="statement" size="big"/>
       <div class="result" v-if="value">
@@ -48,7 +56,7 @@ computed(() => value = getValueStatement())
       </div>
     </div>
     <div class="sidebar">
-      <button>
+      <button class="edit-button" @click="() => $emit('edit')" title="Edit this expression">
         <img src="../assets/edit.svg" alt="Edit" height="16">
       </button>
     </div>

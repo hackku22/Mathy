@@ -2,7 +2,7 @@ import {MathStatement} from './parse'
 import * as math from 'mathjs'
 import {DepGraph} from 'dependency-graph'
 import { v4 as uuidv4 } from 'uuid'
-import {EvaluationResult, Maybe, StatementID, VariableName} from '../types'
+import {EvaluationResult, Maybe, StatementID, VariableName} from './types'
 
 /**
  * Wrapper for a page containing multiple interrelated mathematical statements.
@@ -15,6 +15,11 @@ export class MathPage {
         /** Unique page ID. */
         public readonly id: string,
     ) {}
+
+    /** Get all defined statements. */
+    getStatements(): MathStatement[] {
+        return Object.values(this.statements)
+    }
 
     /** Get a statement by ID if it exists. */
     getStatement(id: StatementID): Maybe<MathStatement> {

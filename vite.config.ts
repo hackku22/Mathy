@@ -9,6 +9,9 @@ export default defineConfig({
             '/api': {
                 target: 'http://localhost:8000/',
             },
+            '/auth': {
+                target: 'http://localhost:8000/',
+            },
         },
     },
     plugins: [
@@ -18,6 +21,5 @@ export default defineConfig({
 
         quasar({
             sassVariables: 'src/quasar-variables.sass',
-        }),
-    ],
+        })],
 })

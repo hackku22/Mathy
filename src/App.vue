@@ -25,10 +25,11 @@ import { ref } from "vue";
       <q-tabs align="left">
         <q-route-tab to="/Scratch" label="Scratch" />
         <q-route-tab to="/Editor" label="Editor" />
+
       </q-tabs>
     </q-header>
 
-    <q-page-container>
+    <q-page-container style="display: flex;padding-top: 20px;">
       <router-view />
     </q-page-container>
   </q-layout>

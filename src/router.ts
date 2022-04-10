@@ -15,8 +15,9 @@ const routes = [
     {
         path: '/editor',
         name: 'Editor',
-        component: () => import('./pages/Editor.vue'),
+        component: () => import(/* webpackChunkName: "Editor" */ './pages/Editor.vue'),
     },
+
 ]
 
 const router = createRouter({

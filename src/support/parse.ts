@@ -1,6 +1,6 @@
 import * as math from 'mathjs'
 import katex from 'katex'
-import {HTMLString, LaTeXString, StatementID} from '../types'
+import {HTMLString, LaTeXString, StatementID} from './types'
 import {v4 as uuidv4} from 'uuid'
 
 /** Base class for walks over MathNode trees. */
@@ -269,6 +269,9 @@ export class MathStatement {
 
         /** The raw statement input by the user. */
         public readonly raw: string,
+
+        public x: Number = 0,
+        public y: Number = 0,
     ) {}
 
     /** Parse the raw statement to an AST. */
@@ -300,6 +303,16 @@ export class MathStatement {
         return node
     }
 
+    /** Returns true if the expression is valid. */
+    isValid(): boolean {
+        try {
+            this.toHTMLString()
+            return true
+        } catch (_) {
+            return false
+        }
+    }
+
     /** Get all symbols referenced in this statement. */
     symbols(): math.SymbolNode[] {
         return (new SymbolWalk()).walk(this.parse())
@@ -313,5 +326,19 @@ export class MathStatement {
     /** Get all symbols used on the RHS of this statement. */
     uses(): math.SymbolNode[] {
         return (new RValSymbolWalk()).walk(this.parse())
+    }
+
+    /** Returns true if the definition is correctly non-recursive. */
+    isNotRecursive(): boolean {
+        const uses = this.uses()
+        const defines = this.defines()
+
+        for ( const define of defines ) {
+            if ( uses.some(x => x.name === define.name) ) {
+                return false
+            }
+        }
+
+        return true
     }
 }
